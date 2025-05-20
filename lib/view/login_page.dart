@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:reusemart/component/form_component.dart';
 import 'package:reusemart/client/auth_client.dart';
 import 'package:reusemart/view/home_page.dart';
+import 'package:reusemart/view/navbar.dart';
 
 // import 'package:main/entity/user.dart';
 
@@ -219,9 +220,16 @@ class _LoginPageState extends State<LoginPage> {
         var token = result['token'];
         var statusCode = result['statusCode'];
         var userId = result['user_id'];
+        var jabatan = result['jabatan'];
+
+        if(jabatan.length > 0) {
+          userType = jabatan;
+        }
 
         print('Token: $token');
         print('Status Code: $statusCode');
+        print('User type: $userType');
+        print('Jabatan: $jabatan');
 
         if (statusCode == 200 || statusCode == 201) {
           String? fcmToken = await AuthClient.getFcmToken();
@@ -241,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
             btnOkOnPress: () {
               Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (_) => const HomePage()),
+              MaterialPageRoute(builder: (_) => NavBar(userType: userType)),
               (Route<dynamic> route) => false,
               );
             },

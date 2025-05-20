@@ -14,6 +14,11 @@ class AuthClient {
     return prefs.getString('auth_token'); // Mengambil token dari SharedPreferences
   }
 
+  static Future<String?> getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_type'); 
+  }
+
   static Future<String?> getFcmToken() async {
     try {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -25,7 +30,6 @@ class AuthClient {
       return null;
     }
   }
-
 
   static Future<void> sendFcmTokenToBackend(String userId, String userType, String fcmToken, String token) async {
     try {
@@ -116,6 +120,7 @@ class AuthClient {
         'token': data['token'],
         'statusCode': response.statusCode,
         'user_id': data['id'],
+        'jabatan': data['jabatan'] ?? '',
       };
     } catch (e) {
       return Future.error(e.toString());
@@ -143,11 +148,16 @@ class AuthClient {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('auth_token');
+      await prefs.remove('user_type');
+      await prefs.remove('jabatan');
+      await prefs.remove('user_id');
 
       print('Logout successful');
     } catch (e) {
       return Future.error('Logout error: $e');
     }
   }
+
+
 
 }
