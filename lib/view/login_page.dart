@@ -234,7 +234,6 @@ class _LoginPageState extends State<LoginPage> {
         if (statusCode == 200 || statusCode == 201) {
           String? fcmToken = await AuthClient.getFcmToken();
           if (fcmToken != null) {
-            // Kirim ke backend
             await AuthClient.sendFcmTokenToBackend(userId, userType, fcmToken, token);
           }
 
@@ -273,10 +272,4 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // void pushRegister(BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (_) => const RegisterForm()),
-  //   );
-  // }
 }

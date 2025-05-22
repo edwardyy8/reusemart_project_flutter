@@ -45,6 +45,7 @@ class AuthClient {
           'fcm_token': fcmToken,
         }),
       );
+
       if (response.statusCode == 200) {
         print('FCM token updated successfully: ${response.body}');
       } else {
@@ -90,7 +91,6 @@ class AuthClient {
       String email, String password) async {
 
     try {
-      // Mengirim data login
       var response = await post(
         Uri.http(url, '$endpoint/login'),
         headers: {"Content-Type": "application/json"},
@@ -106,20 +106,17 @@ class AuthClient {
 
       var data = json.decode(response.body);
 
-      String token = data['token'];
-      print(token);
-      print(response.statusCode);
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('user_type', data['user_type']);
-      await prefs.setString('auth_token', token);
+      await prefs.setString('auth_token', data['token']);
       await prefs.setString('jabatan', data['jabatan'] ?? '');
+      await prefs.setString('user_id', data['id'].toString());
 
       return {
         'user_type': data['user_type'],
         'token': data['token'],
         'statusCode': response.statusCode,
-        'user_id': data['id'],
+        'user_id': data['id'].toString(),
         'jabatan': data['jabatan'] ?? '',
       };
     } catch (e) {
