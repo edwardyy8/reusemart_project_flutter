@@ -56,6 +56,26 @@ class AuthClient {
     }
   }
 
+  static Future<void> removeFcmTokenOnLogout(String token) async {
+  try {
+    final response = await post(
+      Uri.http(url, '$endpoint/remove-fcm-token'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({}),
+    );
+    if (response.statusCode == 200) {
+      print('FCM token removed from server');
+    } else {
+      print('Failed to remove FCM token: ${response.body}');
+    }
+  } catch (e) {
+    print('Error removing FCM token: $e');
+  }
+}
+
   // static Future<User> fetchCurrentUser() async {
   //   try {
   //     String? token = await getAuthToken();

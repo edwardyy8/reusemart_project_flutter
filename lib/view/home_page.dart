@@ -38,7 +38,9 @@ class _HomePageState extends State<HomePage> {
     try {
       var token = await AuthClient.getAuthToken();
 
-      await AuthClient.logout(token!);
+      await AuthClient.removeFcmTokenOnLogout(token!);
+
+      await AuthClient.logout(token);
 
       AwesomeDialog(
         context: context,
@@ -66,11 +68,11 @@ class _HomePageState extends State<HomePage> {
         dialogType: DialogType.error,
         showCloseIcon: true,
         title: 'Error',
-        desc: 'Login gagal. Silahkan coba lagi.',
+        desc: 'Logout gagal. Silahkan coba lagi.',
         btnOkOnPress: () {},
         btnOkColor: Colors.red,
       ).show();
-      print('Login error: $e');
+      print('Logout error: $e');
     }
   }
 }
