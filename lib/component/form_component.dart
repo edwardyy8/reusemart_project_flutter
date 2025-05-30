@@ -90,7 +90,6 @@ class _InputFormWidgetState extends State<InputFormWidget> {
                     onPressed: () {
                       setState(() {
                         _obscureText = !_obscureText;
-                        print('Toggled _obscureText: $_obscureText'); // Debug toggle
                       });
                     },
                   )
