@@ -185,6 +185,28 @@ class UserClient {
     }
   }
 
+  Future<int> getJumlahPesananKurir(String token) async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/jumlah-pesanan-kurir'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Jumlah pesanan kurir: $data');
+        return data['data'] ?? 0;
+      } else {
+        throw Exception('Failed to fetch jumlah pesanan kurir');
+      }
+    } catch (e) {
+      throw Exception('Error fetching jumlah pesanan kurir: $e');
+    }
+  }
+
 
 
 }

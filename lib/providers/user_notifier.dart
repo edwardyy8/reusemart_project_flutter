@@ -38,5 +38,13 @@ class UserNotifier extends AsyncNotifier<User> {
     return prefs.getString('auth_token');
   }
 
+  Future<int> getJumlahPesananKurir() async {
+    final token = await getAuthToken();
+    if (token == null) {
+      return 0;
+    }
+    return _api.getJumlahPesananKurir(token);
+  }
+
   
 }

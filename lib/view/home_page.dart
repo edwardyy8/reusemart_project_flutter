@@ -4,6 +4,10 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:reusemart/client/user_client.dart';
 import 'package:reusemart/view/login_page.dart';
 
+import 'package:reusemart/providers/user_notifier.dart';
+import 'package:reusemart/providers/providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -41,6 +45,10 @@ class _HomePageState extends State<HomePage> {
       await UserClient.removeFcmTokenOnLogout(token!);
 
       await UserClient.logout(token);
+
+      // Invalidate provider untuk reset data user
+      final notifier = ProviderScope.containerOf(context).read(userListProvider.notifier);
+      notifier.state = const AsyncValue.error('Logged out', StackTrace.empty);
 
       AwesomeDialog(
         context: context,
