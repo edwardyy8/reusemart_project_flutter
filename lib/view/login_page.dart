@@ -7,6 +7,9 @@ import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/navbar.dart';
 
 // import 'package:main/entity/user.dart';
+import 'package:reusemart/providers/providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 
 class LoginPage extends StatefulWidget {
   final Map? data;
@@ -238,6 +241,10 @@ class _LoginPageState extends State<LoginPage> {
           if (fcmToken != null) {
             await UserClient.sendFcmTokenToBackend(userId, userType, fcmToken, token);
           }
+
+          // Refresh user data setelah login
+          final notifier = ProviderScope.containerOf(context).read(userListProvider.notifier);
+          await notifier.refresh();
 
           AwesomeDialog(
             context: context,

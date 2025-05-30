@@ -11,8 +11,7 @@ class ProfileKurir extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usersAsync = ref.watch(userListProvider);
-    final formKey = GlobalKey<FormState>();
-    
+    final formKey = GlobalKey<FormState>();    
 
     return Scaffold(
       appBar: AppBar(
@@ -107,12 +106,36 @@ class ProfileKurir extends ConsumerWidget {
                                     ),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                  child: Text(
-                                    '?? paket diantar',
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.grey[800],
-                                    ),
+                                  child: FutureBuilder<int>(
+                                    future: ref.read(userListProvider.notifier).getJumlahPesananKurir(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
+                                        return const Text(
+                                          'Loading...',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.grey,
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Text(
+                                          'Error: ${snapshot.error}',
+                                          style: const TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.red,
+                                          ),
+                                        );
+                                      } else {
+                                        final jumlahPesanan = snapshot.data ?? 0;
+                                        return Text(
+                                          '$jumlahPesanan paket diantar',
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                            color: Colors.grey[800],
+                                          ),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
