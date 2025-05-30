@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
-import 'package:reusemart/client/auth_client.dart';
+import 'package:reusemart/client/user_client.dart';
 import 'package:reusemart/view/login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
 
   void _onLogout() async {
     try {
-      var token = await AuthClient.getAuthToken();
+      var token = await UserClient.getAuthToken();
 
-      await AuthClient.removeFcmTokenOnLogout(token!);
+      await UserClient.removeFcmTokenOnLogout(token!);
 
-      await AuthClient.logout(token);
+      await UserClient.logout(token);
 
       AwesomeDialog(
         context: context,
@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
         showCloseIcon: false,
         title: 'Success',
         desc: 'Logout Berhasil! Kami berharap Anda kembali lagi.',
+        dismissOnTouchOutside: false,
         btnOkOnPress: () {
           Navigator.pushAndRemoveUntil(
           context,

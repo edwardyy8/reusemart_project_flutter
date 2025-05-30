@@ -1,6 +1,6 @@
-import 'dart:convert';
+part of 'user.dart';
 
-class Pegawai {
+class Pegawai implements User {
   String? idPegawai;
   int? idJabatan;
   String? nama;
@@ -11,6 +11,7 @@ class Pegawai {
   DateTime? createdAt;
   String? isAktif; 
   String? fcmToken;
+  Jabatan? jabatan;
 
   Pegawai({
     this.idPegawai,
@@ -23,6 +24,7 @@ class Pegawai {
     this.createdAt,
     this.isAktif,
     this.fcmToken,
+    this.jabatan,
   });
 
   factory Pegawai.fromRawJson(String str) => Pegawai.fromJson(json.decode(str));
@@ -35,9 +37,12 @@ class Pegawai {
       password: json['password'],
       fotoProfile: json['foto_profile'],
       tanggalLahir: DateTime.parse(json['tanggal_lahir']),
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.parse(json['createdAt']),
       isAktif: json['is_aktif'],
       fcmToken: json['fcm_token'],
+      jabatan: json['jabatan'] != null
+          ? Jabatan.fromJson(json['jabatan'])
+          : null,
     );
   }
 
@@ -50,9 +55,10 @@ class Pegawai {
       'password': password,
       'foto_profile': fotoProfile,
       'tanggal_lahir': tanggalLahir?.toIso8601String(),
-      'created_at': createdAt?.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
       'is_aktif': isAktif,
       'fcm_token': fcmToken,
+      'jabatan': jabatan?.toJson(),
     };
   }
 }

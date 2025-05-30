@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:reusemart/client/auth_client.dart';
 
 import 'package:reusemart/view/home_page.dart';
+import 'package:reusemart/view/Kurir/profile_kurir.dart';
+
 
 
 class NavBar extends StatefulWidget {
@@ -39,7 +40,7 @@ class _NavBarState extends State<NavBar> {
       case 'penitip':
         return [HomePage(), HomePage(), HomePage()];
       case 'Kurir':
-        return [HomePage(), HomePage(), HomePage()];
+        return [HomePage(), HomePage(), ProfileKurir()];
       case 'Hunter':
         return [HomePage(), HomePage(), HomePage()];
       default:

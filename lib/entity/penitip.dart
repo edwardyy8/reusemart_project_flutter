@@ -1,6 +1,6 @@
-import 'dart:convert';
+part of 'user.dart';
 
-class Penitip {
+class Penitip implements User {
   String? idPenitip;
   String? nama;
   double? ratingPenitip;
@@ -38,15 +38,15 @@ class Penitip {
     return Penitip(
       idPenitip: json['id_penitip'],
       nama: json['nama'],
-      ratingPenitip: json['rating_penitip']?.toDouble(),
-      saldoPenitip: json['saldo_penitip']?.toInt(),
-      poinPenitip: json['poin_penitip']?.toInt(),
+      ratingPenitip: (json['rating_penitip'] as num).toDouble(),
+      saldoPenitip: (json['saldo_penitip']as num).toInt(),
+      poinPenitip: (json['poin_penitip']as num).toInt(),
       noKtp: json['no_ktp'],
       email: json['email'],
       password: json['password'],
       isTop: json['is_top'],
       fotoKtp: json['foto_ktp'],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.parse(json['createdAt']),
       fotoProfile: json['foto_profile'],
       isAktif: json['is_aktif'],
       fcmToken: json['fcm_token'],
@@ -65,7 +65,7 @@ class Penitip {
       'password': password,
       'is_top': isTop,
       'foto_ktp': fotoKtp,
-      'created_at': createdAt?.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
       'foto_profile': fotoProfile,
       'is_aktif': isAktif,
       'fcm_token': fcmToken,

@@ -2,7 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:reusemart/component/form_component.dart';
-import 'package:reusemart/client/auth_client.dart';
+import 'package:reusemart/client/user_client.dart';
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/navbar.dart';
 
@@ -103,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            inputForm((p0) {
+                            InputFormWidget(
+                              validasi: (p0) {
                                 if (p0 == null || p0.isEmpty) {
                                   return "Email tidak boleh kosong";
                                 }
@@ -127,7 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                             ),
-                            inputForm((p0) {
+                            InputFormWidget(
+                              validasi: (p0) {
                                 if (p0 == null || p0.isEmpty) {
                                   return "Password tidak boleh kosong";
                                 } else if (p0.length < 8) {
@@ -213,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
         var email = emailPhoneController.text;
         var password = passwordController.text;
 
-        var result = await AuthClient.login(email, password);
+        var result = await UserClient.login(email, password);
 
         // Jika login berhasil, navigasi ke halaman home
         var userType = result['user_type'];
@@ -232,9 +234,9 @@ class _LoginPageState extends State<LoginPage> {
         print('Jabatan: $jabatan');
 
         if (statusCode == 200 || statusCode == 201) {
-          String? fcmToken = await AuthClient.getFcmToken();
+          String? fcmToken = await UserClient.getFcmToken();
           if (fcmToken != null) {
-            await AuthClient.sendFcmTokenToBackend(userId, userType, fcmToken, token);
+            await UserClient.sendFcmTokenToBackend(userId, userType, fcmToken, token);
           }
 
           AwesomeDialog(
@@ -243,6 +245,7 @@ class _LoginPageState extends State<LoginPage> {
             headerAnimationLoop: false,
             dialogType: DialogType.success,
             showCloseIcon: false,
+            dismissOnTouchOutside: false,
             title: 'Success',
             desc: 'Login Berhasil! Selamat datang di ReuseMart',
             btnOkOnPress: () {
@@ -262,6 +265,7 @@ class _LoginPageState extends State<LoginPage> {
           headerAnimationLoop: false,
           dialogType: DialogType.error,
           showCloseIcon: true,
+          dismissOnTouchOutside: false,
           title: 'Error',
           desc: 'Login gagal. Silahkan coba lagi.',
           btnOkOnPress: () {},
