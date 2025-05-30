@@ -1,6 +1,6 @@
-import 'dart:convert';
+part of 'user.dart';
 
-class Pembeli {
+class Pembeli implements User {
   String? idPembeli;
   String? nama;
   String? email;

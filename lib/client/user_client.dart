@@ -5,9 +5,14 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class AuthClient {
+import 'package:reusemart/entity/user.dart';
+
+
+class UserClient {
   static final String endpoint = '/api';
   static final String url = '10.0.2.2:8000';
+
+
 
   static Future<String?> getAuthToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -57,55 +62,65 @@ class AuthClient {
   }
 
   static Future<void> removeFcmTokenOnLogout(String token) async {
-  try {
-    final response = await post(
-      Uri.http(url, '$endpoint/remove-fcm-token'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({}),
-    );
-    if (response.statusCode == 200) {
-      print('FCM token removed from server');
-    } else {
-      print('Failed to remove FCM token: ${response.body}');
+    try {
+      final response = await post(
+        Uri.http(url, '$endpoint/remove-fcm-token'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({}),
+      );
+      if (response.statusCode == 200) {
+        print('FCM token removed from server');
+      } else {
+        print('Failed to remove FCM token: ${response.body}');
+      }
+    } catch (e) {
+      print('Error removing FCM token: $e');
     }
-  } catch (e) {
-    print('Error removing FCM token: $e');
   }
-}
 
-  // static Future<User> fetchCurrentUser() async {
-  //   try {
-  //     String? token = await getAuthToken();
-  //     if (token == null) {
-  //       throw Exception('User is not authenticated');
-  //     }
+  Future<User> fetchCurrentUser() async {
+    try {
+      String? token = await getAuthToken();
+      if (token == null) {
+        throw Exception('User is not authenticated');
+      }
 
-  //     // Membuat request ke API untuk mengambil data user yang sedang login
-  //     final response = await get(
-  //       Uri.http(url, endpoint),
-  //       headers: {
-  //         'Authorization': 'Bearer $token', // Menambahkan token ke header
-  //         'Accept': 'application/json',
-  //       },
-  //     );
+      final response = await get(
+        Uri.http(url, '$endpoint/getUserData'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
 
-  //     print(response.body);
-  //     print(token);
+      print(response.body);
+      
 
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       // Jika response berhasil, parse JSON menjadi objek User
-  //       final data = json.decode(response.body);
-  //       return User.fromJson(data); // Mengembalikan objek User
-  //     } else {
-  //       throw Exception('Failed to load user data');
-  //     }
-  //   } catch (e) {
-  //     throw Exception('Error fetching user: $e');
-  //   }
-  // }
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        final String role = data['role'];
+        final Map<String, dynamic> userData = data['user'];
+        
+        switch (role) {
+          case 'penitip':
+            return Penitip.fromJson(userData);
+          case 'pegawai':
+            return Pegawai.fromJson(userData);
+          default:
+            return Pembeli.fromJson(userData);
+        }
+    
+      } else {
+        throw Exception('Failed to load user data');
+      }
+    } catch (e) {
+      throw Exception('Error fetching user: $e');
+    }
+  }
 
   static Future<Map<String, dynamic>> login(
       String email, String password) async {
@@ -142,11 +157,6 @@ class AuthClient {
     } catch (e) {
       return Future.error(e.toString());
     }
-  }
-
-  Future<void> saveAuthToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token); // Simpan token baru
   }
 
   static Future<void> logout(String token) async {
