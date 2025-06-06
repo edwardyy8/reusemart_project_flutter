@@ -1,5 +1,5 @@
 import 'dart:convert';
- 
+
 class Barang {
   String? idBarang;
   String? idPenitip;
@@ -14,7 +14,7 @@ class Barang {
   double? beratBarang;
   DateTime? tanggalGaransi;
   String? fotoBarang;
- 
+
   Barang({
     this.idBarang,
     this.idPenitip,
@@ -30,7 +30,7 @@ class Barang {
     this.tanggalGaransi,
     this.fotoBarang,
   });
- 
+
   factory Barang.fromRawJson(String str) => Barang.fromJson(json.decode(str));
   factory Barang.fromJson(Map<String, dynamic> json) {
     return Barang(
@@ -53,7 +53,7 @@ class Barang {
       fotoBarang: json["foto_barang"] as String?,
     );
   }
- 
+
   Map<String, dynamic> toJson() {
     return {
       "id_barang": idBarang,

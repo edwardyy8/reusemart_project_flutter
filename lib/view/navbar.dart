@@ -3,7 +3,7 @@ import 'package:reusemart/view/Pembeli/klaim_merchandise.dart';
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/Kurir/profile_kurir.dart';
 import 'package:reusemart/view/Hunter/profile_hunter.dart';
-
+import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
 
 class NavBar extends StatefulWidget {
   final int selectedIndex;
@@ -50,7 +50,7 @@ class _NavBarState extends State<NavBar> {
       case 'penitip':
         return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), HomePage()];
       case 'Kurir':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), ProfileKurir()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
         return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), ProfileHunter()];
       default:
