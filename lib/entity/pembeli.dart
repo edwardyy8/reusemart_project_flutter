@@ -1,7 +1,7 @@
 part of 'user.dart';
 
 class Pembeli implements User {
-  String? idPembeli;
+  int? idPembeli;
   String? nama;
   String? email;
   String? password;
