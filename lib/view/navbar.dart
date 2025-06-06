@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/Kurir/profile_kurir.dart';
+import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
 
 
 
@@ -40,7 +41,7 @@ class _NavBarState extends State<NavBar> {
       case 'penitip':
         return [HomePage(), HomePage(), HomePage()];
       case 'Kurir':
-        return [HomePage(), HomePage(), ProfileKurir()];
+        return [HomePage(), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
         return [HomePage(), HomePage(), HomePage()];
       default:

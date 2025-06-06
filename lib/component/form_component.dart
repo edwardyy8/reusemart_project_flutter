@@ -59,8 +59,7 @@ class _InputFormWidgetState extends State<InputFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, top: 5),
+    return Center(
       child: SizedBox(
         width: 330,
         child: TextFormField(
