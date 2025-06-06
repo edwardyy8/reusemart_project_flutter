@@ -1,0 +1,2 @@
+C:/P3L/reusemart_project_flutter/android/app/.cxx/Debug/621s2742/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/P3L/reusemart_project_flutter/android/app/.cxx/Debug/621s2742/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -6,13 +6,13 @@ import 'package:http_parser/http_parser.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:reusemart/entity/user.dart';
-
+import 'package:reusemart/entity/kategori.dart';
+import 'package:reusemart/entity/merchandise.dart';
 
 class UserClient {
   static final String endpoint = '/api';
-  static final String url = '10.0.2.2:8000';
-
-
+  // static final String url = '10.0.2.2:8000';
+  static final String url = '192.168.88.116:8000';
 
   static Future<String?> getAuthToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -207,6 +207,185 @@ class UserClient {
     }
   }
 
+  Future<int> getJumlahItemHunter(String token) async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/jumlah-item-hunter'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Jumlah item hunter: $data');
+        return data['data'] ?? 0;
+      } else {
+        throw Exception('Failed to fetch jumlah item hunter');
+      }
+    } catch (e) {
+      throw Exception('Error fetching jumlah item hunter: $e');
+    }
+  }
+
+  static Future<List<Kategori>> getAllKategoris() async {
+    final response = await get(
+      Uri.http(url, '$endpoint/kategori'),
+      headers: {'Accept': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final List data = jsonData['data'];
+      return data.map((e) => Kategori.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load kategoris');
+    }
+  }
+
+  static Future<List<dynamic>> getAllBarangs() async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/barang'),
+        headers: {
+          // 'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print(data);
+        return data['data'] ?? 0;
+      } else {
+        throw Exception('Failed to fetch barang');
+      }
+    } catch (e) {
+      throw Exception('Error fetching barang: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getBarangById(String id) async {
+    try {
+      final uri = Uri.http(url, '$endpoint/barang/$id');
+      print('Fetching from: $uri');
+
+      final response = await get(uri, headers: {'Accept': 'application/json'});
+      print('Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        if (data['data'] == null || data['data']['barang'] == null) {
+          throw Exception('Data barang tidak tersedia di response');
+        }
+
+        return {
+          'barang': data['data']['barang'],
+          'jumlah_terjual': data['data']['jumlah_barang_terjual'],
+        };
+      } else if (response.statusCode == 404) {
+        throw Exception('Barang tidak ditemukan');
+      } else {
+        throw Exception('Gagal mengambil data barang');
+      }
+    } catch (e) {
+      throw Exception('Error fetching barang by ID: $e');
+    }
+  }
+
+
+  static Future<Map<String, dynamic>> getPenitipById(String id) async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/penitip/$id'),
+        headers: {
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['data']; // langsung penitip-nya
+      } else if (response.statusCode == 404) {
+        throw Exception('Penitip tidak ditemukan');
+      } else {
+        throw Exception('Gagal mengambil data penitip');
+      }
+    } catch (e) {
+      throw Exception('Error fetching penitip by ID: $e');
+    }
+  }
+
+  static Future<int> getPoinPembeli(String token) async {
+    try{
+      final response = await get(
+        Uri.http(url, '$endpoint/pembeli/pembeliProfile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        }
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Jumlah poin pembeli: $data');
+        return data['pembeli']['poin_pembeli'] ?? 0;
+      } else {
+        throw Exception('Gagal mendapatkan poin pembeli');
+      }
+    } catch (e) {
+      throw Exception('Error fetching poin pembeli: $e');
+    }
+    
+  }
+
+  static Future<List<Merchandise>> getAllMerchandise() async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/merchandise'),
+          headers: {
+          'Accept': 'application/json'
+          },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final List data = jsonData['data'];
+        return data.map((e) => Merchandise.fromJson(e)).toList();
+      } else {
+        throw Exception('Failed to load kategoris');
+      }
+    }catch (e) {
+      throw Exception('Error fetching poin pembeli: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> claimMerchandise(String token, int idMerchandise) async {
+    try {
+      final response = await post(
+        Uri.http(url, '$endpoint/claimMerchandise/$idMerchandise'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      final data = json.decode(response.body);
+
+      return {
+        'statusCode': response.statusCode,
+        'message': data['message'] ?? '',
+      };
+    } catch (e) {
+      print('Error klaim merchandise: $e');
+      return {
+        'statusCode': 500,
+        'message': 'Terjadi kesalahan saat klaim merchandise',
+      };
+    }
+  }
 
 
 }

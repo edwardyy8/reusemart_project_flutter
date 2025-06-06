@@ -265,7 +265,9 @@ class _LoginPageState extends State<LoginPage> {
             btnOkIcon: Icons.check_circle,
           ).show();
         }
-      } catch (e) {
+      } catch (e, stacktrace) {
+         print('Login error: $e');
+         print('Stacktrace: $stacktrace');
         AwesomeDialog(
           context: context,
           animType: AnimType.leftSlide,
@@ -278,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
           btnOkOnPress: () {},
           btnOkColor: Colors.red,
         ).show();
-        print('Login error: $e');
+       
       }
     }
   }
