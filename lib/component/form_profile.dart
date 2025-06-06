@@ -30,8 +30,9 @@ class _InputFormState extends State<InputForm> {
     return Padding(
       padding: const EdgeInsets.only(left: 5, top: 5),
       child: SizedBox(
-        width: 330,
+        width: 300,
         child: TextFormField(
+          style: TextStyle(color: Color.fromARGB(255, 4, 121, 2) ),
           autofocus: true,
           readOnly: true,
           initialValue: widget.value,
@@ -53,7 +54,7 @@ class _InputFormState extends State<InputForm> {
                 ? IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off,
-                      color: Colors.grey,
+                      color: Color.fromARGB(255, 4, 121, 2),
                     ),
                     onPressed: () {
                       setState(() {

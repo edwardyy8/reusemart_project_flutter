@@ -1,6 +1,9 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reusemart/client/user_client.dart';
 import 'package:reusemart/entity/user.dart';
+import 'package:reusemart/view/login_page.dart';
 import '../../providers/providers.dart';
 import 'package:reusemart/component/form_profile.dart';
 
@@ -16,17 +19,26 @@ class ProfileKurir extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 239, 223),
-        title: const Text(
-          'Profil Saya',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Profil Saya',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            
+          ],
         ),
-        automaticallyImplyLeading: true,
       ),
       body: usersAsync.when(
         data: (data) {
+          if (data == null) {
+            return Center(child: const Text('Tidak ada user (sudah logout)'));
+          }
+
           final kurir = data as Pegawai;
           
           return SingleChildScrollView(
@@ -160,7 +172,7 @@ class ProfileKurir extends ConsumerWidget {
                 // form
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  height: MediaQuery.of(context).size.height * 0.45,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 255, 246, 237),
                     border: Border.all(
@@ -172,89 +184,121 @@ class ProfileKurir extends ConsumerWidget {
                   child: Center(
                     child: Form(
                       key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "USERNAME",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "USERNAME",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          InputForm(  
-                            value: kurir.nama!,
-                            hintTxt: "Username"
-                          ),
-                          
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "JABATAN",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                            InputForm(  
+                              value: kurir.nama!,
+                              hintTxt: "Username"
+                            ),
+                            
+                            SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "JABATAN",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          InputForm(  
-                            value: kurir.jabatan?.namaJabatan! ?? "Tidak ada jabatan",
-                            hintTxt: "Jabatan"
-                          ),
-                          
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "EMAIL",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                            InputForm(  
+                              value: kurir.jabatan?.namaJabatan! ?? "Tidak ada jabatan",
+                              hintTxt: "Jabatan"
+                            ),
+                            
+                            SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "EMAIL",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          InputForm(
-                            value: kurir.email!,
-                            hintTxt: "Email",
-                          ),
-            
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "PASSWORD",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                            InputForm(
+                              value: kurir.email!,
+                              hintTxt: "Email",
+                            ),
+                                    
+                            SizedBox(height: 20),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Text(
+                                "PASSWORD",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          InputForm(
-                            password: true,
-                            value: kurir.password!,
-                            hintTxt: "Password",
-                          ),
-                          SizedBox(height: 10),
-                        ],
+                            InputForm(
+                              password: true,
+                              value: kurir.password!,
+                              hintTxt: "Password",
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-            
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _onLogout(context, ref),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    backgroundColor: Color.fromARGB(255, 255, 239, 223),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(
+                        Icons.logout,
+                        size: 22,
+                        color: Color.fromARGB(255, 4, 121, 2),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color.fromARGB(255, 4, 121, 2),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
               ],
             ),
           );
@@ -263,5 +307,46 @@ class ProfileKurir extends ConsumerWidget {
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
+  }
+
+  void _onLogout(BuildContext context, WidgetRef ref) async {
+    try {
+      await ref.read(userListProvider.notifier).logout();
+
+      if (!context.mounted) return;
+
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.success,
+        showCloseIcon: false,
+        title: 'Success',
+        desc: 'Logout Berhasil! Kami berharap Anda kembali lagi.',
+        dismissOnTouchOutside: false,
+        btnOkOnPress: () {
+          Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+          (Route<dynamic> route) => false,
+          );
+        },
+        btnOkIcon: Icons.check_circle,
+      ).show();
+      
+    } catch (e) {
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.error,
+        showCloseIcon: true,
+        title: 'Error',
+        desc: 'Logout gagal. Silahkan coba lagi.',
+        btnOkOnPress: () {},
+        btnOkColor: Colors.red,
+      ).show();
+      print('Logout error: $e');
+    }
   }
 }

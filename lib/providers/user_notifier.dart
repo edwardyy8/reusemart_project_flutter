@@ -9,19 +9,19 @@ final userClientProvider = Provider<UserClient>((ref) {
 });
 
 final userListProvider =
-    AsyncNotifierProvider<UserNotifier, User>(UserNotifier.new);
+    AsyncNotifierProvider<UserNotifier, User?>(UserNotifier.new);
 
-class UserNotifier extends AsyncNotifier<User> {
+class UserNotifier extends AsyncNotifier<User?> {
   late final UserClient _api;
 
   @override
-  FutureOr<User> build() {
+  FutureOr<User?> build() {
     // akan dijalankan sekali pertama kali
     _api = ref.read(userClientProvider);
     return _fetchCurrentUser();
   }
 
-  Future<User> _fetchCurrentUser() async {
+  Future<User?> _fetchCurrentUser() async {
     final data = await _api.fetchCurrentUser();
     return data;
   }
@@ -44,6 +44,21 @@ class UserNotifier extends AsyncNotifier<User> {
       return 0;
     }
     return _api.getJumlahPesananKurir(token);
+  }
+
+  Future<void> logout() async {
+    state = const AsyncValue.loading();
+    try {
+      final token = await getAuthToken();
+      if (token != null) {
+        await UserClient.removeFcmTokenOnLogout(token);
+        await UserClient.logout(token);
+      }
+      
+      state = AsyncValue.data(null); 
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
   }
 
   
