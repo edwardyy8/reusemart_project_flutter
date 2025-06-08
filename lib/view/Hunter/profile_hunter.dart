@@ -4,18 +4,17 @@ import 'package:reusemart/entity/user.dart';
 import '../../providers/providers.dart';
 import 'package:reusemart/component/form_profile.dart';
 
-
 class ProfileHunter extends ConsumerWidget {
   const ProfileHunter({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final usersAsync = ref.watch(userListProvider);
-    final formKey = GlobalKey<FormState>();    
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 255, 239, 223),
+        backgroundColor: const Color.fromARGB(255, 255, 239, 223),
         title: const Text(
           'Profil Saya',
           style: TextStyle(
@@ -28,239 +27,204 @@ class ProfileHunter extends ConsumerWidget {
       body: usersAsync.when(
         data: (data) {
           final hunter = data as Pegawai;
-          
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color.fromRGBO(255, 239, 223, 1),
-                        Color.fromRGBO(255, 255, 255, 1),
-                      ],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        spreadRadius: 1,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Column(
-                      children: [
-                        SizedBox(height: 7),
-                        Row(
-                          children: [
-                            FutureBuilder<String?>(
-                              future: UserNotifier.getAuthToken(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
-                                  return Text('Gagal mengambil token');
-                                }
-                                          
-                                final token = snapshot.data!;
-                                return Image.network(
-                                  'http://10.0.2.2:8000/api/pegawai/foto-profile/${hunter.fotoProfile}',
-                                  headers: {
-                                    'Authorization': 'Bearer $token',
-                                  },
-                                  width: 100,
-                                  height: 100,
-                                );
-                              },
-                            ),
-                            SizedBox(width: 20),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${hunter.nama}',
-                                  style: TextStyle(
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '${hunter.email}',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.grey[800],
-                                  ),
-                                ),
-                                SizedBox(height: 5),
-                                Container(
-                                  padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 16.0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color.fromARGB(255, 166, 166, 166),
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: FutureBuilder<int>(
-                                    future: ref.read(userListProvider.notifier).getJumlahItemHunter(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                        return const Text(
-                                          'Loading...',
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.grey,
-                                          ),
-                                        );
-                                      } else if (snapshot.hasError) {
-                                        return Text(
-                                          'Error: ${snapshot.error}',
-                                          style: const TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.red,
-                                          ),
-                                        );
-                                      } else {
-                                        final jumlahItem = snapshot.data ?? 0; 
-                                        return Text(
-                                          '$jumlahItem barang dijemput', 
-                                          style: TextStyle(
-                                            fontSize: 16.0,
-                                            color: Colors.grey[800],
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ]
-                        ),
-                        SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 50),
-                Text(
-                  'DETAIL PRIBADI',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 83, 83, 83),
-                  ),
-                ),
-                SizedBox(height: 30),
-                // form
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20.0),
-                  height: MediaQuery.of(context).size.height * 0.45,
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 255, 246, 237),
-                    border: Border.all(
-                      color: Color.fromARGB(255, 166, 166, 166),
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Center(
-                    child: Form(
-                      key: formKey,
+
+          return SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
+                          _buildHeader(context, hunter, ref),
+                          const SizedBox(height: 40),
+                          const Center(
                             child: Text(
-                              "USERNAME",
-                              textAlign: TextAlign.left,
+                              'DETAIL PRIBADI',
                               style: TextStyle(
+                                fontSize: 28,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                                color: Color.fromARGB(255, 83, 83, 83),
                               ),
                             ),
                           ),
-                          InputForm(  
-                            value: hunter.nama!,
-                            hintTxt: "Username"
-                          ),
-                          
-                          SizedBox(height: 20),
+                          const SizedBox(height: 30),
                           Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "JABATAN",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
+                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 255, 246, 237),
+                                border: Border.all(
+                                  color: const Color.fromARGB(255, 166, 166, 166),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Form(
+                                key: formKey,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildLabel("USERNAME"),
+                                    InputForm(
+                                      value: hunter.nama ?? '',
+                                      hintTxt: "Username",
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildLabel("JABATAN"),
+                                    InputForm(
+                                      value: hunter.jabatan?.namaJabatan ?? "Tidak ada jabatan",
+                                      hintTxt: "Jabatan",
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildLabel("EMAIL"),
+                                    InputForm(
+                                      value: hunter.email ?? '',
+                                      hintTxt: "Email",
+                                    ),
+                                    const SizedBox(height: 16),
+                                    _buildLabel("PASSWORD"),
+                                    InputForm(
+                                      password: true,
+                                      value: hunter.password ?? '',
+                                      hintTxt: "Password",
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                          InputForm(  
-                            value: hunter.jabatan?.namaJabatan! ?? "Tidak ada jabatan",
-                            hintTxt: "Jabatan"
-                          ),
-                          
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "EMAIL",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          InputForm(
-                            value: hunter.email!,
-                            hintTxt: "Email",
-                          ),
-            
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Text(
-                              "PASSWORD",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          InputForm(
-                            password: true,
-                            value: hunter.password!,
-                            hintTxt: "Password",
-                          ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     ),
                   ),
-                ),
-            
-              ],
+                );
+              },
             ),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, _) => Center(child: Text('Error: $error')),
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, Pegawai hunter, WidgetRef ref) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color.fromRGBO(255, 239, 223, 1),
+            Color.fromRGBO(255, 255, 255, 1),
+          ],
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          FutureBuilder<String?>(
+            future: UserNotifier.getAuthToken(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              } else if (!snapshot.hasData || snapshot.data == null) {
+                return const Text('Gagal mengambil token');
+              }
+
+              final token = snapshot.data!;
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(50),
+                child: Image.network(
+                  'http://192.168.88.116:8000/api/pegawai/foto-profile/${hunter.fotoProfile}',
+                  headers: {'Authorization': 'Bearer $token'},
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hunter.nama ?? '',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  hunter.email ?? '',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[800]),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color.fromARGB(255, 166, 166, 166), width: 1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: FutureBuilder<int>(
+                    future: ref.read(userListProvider.notifier).getJumlahKomisiHunter(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text(
+                          'Loading...',
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Text(
+                          'Error: ${snapshot.error}',
+                          style: const TextStyle(fontSize: 16, color: Colors.red),
+                        );
+                      } else {
+                        final jumlahKomisi = snapshot.data ?? 0;
+                        return Text(
+                          'Total Komisi: Rp $jumlahKomisi',
+                          style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 5, bottom: 4),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+          fontSize: 16,
+        ),
       ),
     );
   }

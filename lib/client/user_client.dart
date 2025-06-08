@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -226,6 +227,30 @@ class UserClient {
       }
     } catch (e) {
       throw Exception('Error fetching jumlah item hunter: $e');
+    }
+  }
+
+  Future<int> getJumlahKomisiHunter(String token) async {
+    try {
+      final response = await get(
+        Uri.http(url, '$endpoint/getJumlahKomisiHunter'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        print('Total komisi hunter: $data');
+        print('Status Code: ${response.statusCode}');
+        print('Response Body: ${response.body}');
+        return (data['data'] ?? 0);
+      } else {
+        throw Exception('Failed to fetch total komisi hunter');
+      }
+    } catch (e) {
+      throw Exception('Error fetching total komisi hunter: $e');
     }
   }
 

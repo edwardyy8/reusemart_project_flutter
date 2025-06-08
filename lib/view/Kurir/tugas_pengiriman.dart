@@ -95,7 +95,29 @@ class _TugasPengirimanState extends State<TugasPengiriman> with SingleTickerProv
                   children: [
                     // Aktif Tab
                     pemesananAktif.isEmpty
-                        ? Center(child: Text('Tidak ada tugas pengiriman aktif'))
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'images/logo/emptyboxrm.png',
+                                  width: 300,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
+                                Text(
+                                  'Lagi sepi nih..',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text('Belum ada tugas pengiriman aktif saat ini.'),
+                              ],
+                            )
+                          )
                         : ListView.builder(
                             itemCount: pemesananAktif.length,
                             itemBuilder: (context, index) {
@@ -268,7 +290,29 @@ class _TugasPengirimanState extends State<TugasPengiriman> with SingleTickerProv
                 
                     // Histori Tab
                     pemesananHistori.isEmpty
-                        ? Center(child: Text('Tidak ada histori tugas pengiriman'))
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'images/logo/emptyboxrm.png',
+                                  width: 300,
+                                  height: 200,
+                                  fit: BoxFit.cover,
+                                ),
+                                Text(
+                                  'Lagi sepi nih..',
+                                  style: TextStyle(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text('Belum ada tugas pengiriman histori saat ini.'),
+                              ],
+                            )
+                          )
                         : ListView.builder(
                             itemCount: pemesananHistori.length,
                             itemBuilder: (context, index) {

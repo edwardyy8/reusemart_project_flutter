@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusemart/entity/kategori.dart';
 import 'package:reusemart/entity/merchandise.dart';
+import 'package:reusemart/entity/pemesanan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../client/user_client.dart';
+import '../client/pemesanan_client.dart';
 import '../entity/user.dart';
 import 'dart:async';
 
@@ -56,6 +58,14 @@ class UserNotifier extends AsyncNotifier<User?> {
     return _api.getJumlahItemHunter(token);
   }
 
+   Future<int> getJumlahKomisiHunter() async {
+    final token = await getAuthToken();
+    if (token == null) {
+      return 0;
+    }
+    return _api.getJumlahKomisiHunter(token);
+  }
+
   static Future<List<Kategori>> getAllKategoris() async {
     return await UserClient.getAllKategoris();
   }
@@ -74,6 +84,10 @@ class UserNotifier extends AsyncNotifier<User?> {
 
   static Future<List<Merchandise>> getAllMerchandise() async {
     return await UserClient.getAllMerchandise();
+  }
+
+  static Future<List<dynamic>> getKomisiHunter(String token) async {
+    return await PemesananClient.getKomisiHunter(token);
   }
 
   Future<int> getPoinPembeli() async {

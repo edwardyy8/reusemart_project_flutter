@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reusemart/view/Hunter/history_komisi.dart';
 import 'package:reusemart/view/Pembeli/klaim_merchandise.dart';
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/Kurir/profile_kurir.dart';
@@ -52,7 +53,7 @@ class _NavBarState extends State<NavBar> {
       case 'Kurir':
         return [HomePage(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), ProfileHunter()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), HistoryKomisi(), ProfileHunter()];
       default:
         return [HomePage(), HomePage()];
     }

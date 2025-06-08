@@ -4,7 +4,6 @@ import 'package:reusemart/entity/barang.dart';
 import 'package:reusemart/entity/kategori.dart';
 import 'package:reusemart/view/login_page.dart';
 import 'package:reusemart/view/detail_barang.dart';
-import 'package:reusemart/view/pembeli/klaim_merchandise.dart';
 import 'package:reusemart/view/kategori_drawer.dart';
 import 'package:reusemart/view/top_navbar.dart';
 
@@ -80,10 +79,15 @@ class _HomePageState extends State<HomePage> {
     }
 
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered
-          .where((barang) =>
-              barang.namaBarang?.toLowerCase().contains(_searchQuery.toLowerCase()) ?? false)
-          .toList();
+      filtered = filtered.where((barang) {
+        final query = _searchQuery.toLowerCase();
+
+        final nama = barang.namaBarang?.toLowerCase() ?? '';
+        final harga = barang.hargaBarang?.toString() ?? '';
+        final deskripsi = barang.deskripsiBarang?.toLowerCase() ?? '';
+
+        return nama.contains(query) || harga.contains(query) || deskripsi.contains(query);
+      }).toList();
     }
 
     setState(() {
