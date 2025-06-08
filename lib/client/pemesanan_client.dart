@@ -5,7 +5,8 @@ import 'package:reusemart/entity/pemesanan.dart';
 
 class PemesananClient {
   static final String endpoint = '/api';
-  static final String url = '10.0.2.2:8000';
+  // static final String url = '10.0.2.2:8000';
+  static final String url = '192.168.88.116:8000';
 
   static Future<Map<String, List<Pemesanan>>> getPemesananKurir() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,5 +68,46 @@ class PemesananClient {
     
   }
   
+  static Future<List<dynamic>> getKomisiHunter(String token) async {
+    final response = await get(
+      Uri.http(url, '$endpoint/getKomisiHunter'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return jsonResponse['data'];
+    } else {
+      throw Exception('Failed to load komisi: ${response.body}');
+    }
+  }
+
+  static Future<Pemesanan> getPemesananByIdOrder(String idPemesanan) async {
+
+    final response = await get(
+      Uri.http(url, '$endpoint/getPemesananByIdOrder/$idPemesanan'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (jsonResponse['status'] == true) {
+        final data = jsonResponse['data'] as Map<String, dynamic>;
+        return Pemesanan.fromJson(data);
+      } else {
+        throw Exception('Gagal ambil data pemesanan: ${jsonResponse['message']}');
+      }
+    } else {
+      throw Exception('Failed to load pemesanan by ID: ${response.body}');
+    }
+  }
+
+
 
 }

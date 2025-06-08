@@ -112,7 +112,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
         ),
 
         const SizedBox(height: 4),
-        Text("Tersedia • ${garansiAktif ? "Garansi" : "Tanpa Garansi"} • ${barang!['berat_barang']}Kg"),
+        Text("${barang!['status_barang']} • ${garansiAktif ? "Garansi" : "Tanpa Garansi"} • ${barang!['berat_barang']}Kg"),
 
         const SizedBox(height: 16),
 
