@@ -22,6 +22,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   TextEditingController emailPhoneController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -160,17 +161,26 @@ class _LoginPageState extends State<LoginPage> {
                               children: [
                                 SizedBox(height: 10),
                                 ElevatedButton(
-                                  onPressed: _login,
+                                  onPressed: _isLoading ? null : _login,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Color.fromARGB(255, 4, 121, 2),
                                   ),
-                                  child: const Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                  child: _isLoading
+                                    ? SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 2.0,
+                                        ),
+                                      )
+                                    : const Text(
+                                        'LOGIN',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                                 ),
                                 
                                 SizedBox(height: 10),
@@ -214,6 +224,10 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
         var email = emailPhoneController.text;
         var password = passwordController.text;
@@ -279,6 +293,10 @@ class _LoginPageState extends State<LoginPage> {
           btnOkColor: Colors.red,
         ).show();
         print('Login error: $e');
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }

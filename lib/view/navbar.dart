@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-
+import 'package:reusemart/view/Hunter/history_komisi.dart';
+import 'package:reusemart/view/Pembeli/klaim_merchandise.dart';
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/Kurir/profile_kurir.dart';
-
-
+import 'package:reusemart/view/Hunter/profile_hunter.dart';
+import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
 
 class NavBar extends StatefulWidget {
   final int selectedIndex;
   final int indextab;
   final String userType;
+  final VoidCallback? onHomeTap;
 
-  const NavBar({super.key, this.selectedIndex = 0, this.indextab = 0, required this.userType});
+  const NavBar({super.key, this.selectedIndex = 0, this.indextab = 0, required this.userType, this.onHomeTap});
 
   @override
   State<NavBar> createState() => _NavBarState();
@@ -18,31 +20,40 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
-  int indextab = 0;
+  int _refreshKey = 0;
 
   @override
   void initState(){
     super.initState();
     _selectedIndex = widget.selectedIndex;
-    indextab = widget.indextab;
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (_selectedIndex == index) {
+      setState(() {
+        _refreshKey++;
+      });
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+
+     if (index == 0 && widget.onHomeTap != null) {
+      widget.onHomeTap!();
+    }
   }
 
   List<Widget> _getPages() {
     switch (widget.userType) {
       case 'pembeli':
-        return [HomePage(), HomePage(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), KlaimMerchandise(), HomePage()];
       case 'penitip':
-        return [HomePage(), HomePage(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), HomePage()];
       case 'Kurir':
-        return [HomePage(), HomePage(), ProfileKurir()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
-        return [HomePage(), HomePage(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), HistoryKomisi(), ProfileHunter()];
       default:
         return [HomePage(), HomePage()];
     }
@@ -54,6 +65,7 @@ class _NavBarState extends State<NavBar> {
         return [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Riwayat'),
+          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Merchandise'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
       case 'penitip':

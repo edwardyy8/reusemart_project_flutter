@@ -9,7 +9,7 @@ class Penitip implements User {
   String? noKtp;
   String? email;
   String? password;
-  bool? isTop;
+  String? isTop;
   String? fotoKtp;
   DateTime? createdAt;
   String? fotoProfile;
