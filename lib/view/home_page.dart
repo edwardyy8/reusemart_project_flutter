@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reusemart/client/user_client.dart';
-import 'package:reusemart/entity/barang.dart';
-import 'package:reusemart/entity/kategori.dart';
-import 'package:reusemart/view/login_page.dart';
-import 'package:reusemart/view/detail_barang.dart';
-import 'package:reusemart/view/kategori_drawer.dart';
+import 'package:reusemart/view/show_barang.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:reusemart/view/top_navbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,162 +13,22 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<Barang> _allBarangs = [];
-  List<Barang> _filteredBarangs = [];
-  List<Kategori> _allKategoris = [];
-  int? _selectedKategoriId;
-  String _searchQuery = '';
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBarangs();
-    _loadKategori();
-  }
-
-  void onHomeTapped() {
-    setState(() {
-      _selectedKategoriId = null;
-      _searchQuery = '';
-    });
-    _loadBarangs();
-  }
-
-  Future<void> _loadBarangs() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      List<dynamic> rawData = await UserClient.getAllBarangs();
-      List<Barang> listBarang = rawData.map((e) => Barang.fromJson(e)).toList();
-
-      setState(() {
-        _allBarangs = listBarang;
-        _applyFilter();
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-      print('Error loading barangs: $e');
-    }
-  }
-
-  Future<void> _loadKategori() async {
-    final kategoris = await UserClient.getAllKategoris();
-    setState(() {
-      _allKategoris = kategoris;
-    });
-  }
-
-  void _applyFilter() {
-    List<Barang> filtered = _allBarangs;
-
-    if (_selectedKategoriId != null) {
-      filtered = filtered
-          .where((barang) =>
-              barang.idKategori == _selectedKategoriId)
-          .toList();
-    }
-
-    if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((barang) {
-        final query = _searchQuery.toLowerCase();
-
-        final nama = barang.namaBarang?.toLowerCase() ?? '';
-        final harga = barang.hargaBarang?.toString() ?? '';
-        final deskripsi = barang.deskripsiBarang?.toLowerCase() ?? '';
-
-        return nama.contains(query) || harga.contains(query) || deskripsi.contains(query);
-      }).toList();
-    }
-
-    setState(() {
-      _filteredBarangs = filtered;
-    });
-  }
-
-  void _onKategoriSelected(int idKategori) {
-    Navigator.of(context).pop();
-    setState(() {
-      _selectedKategoriId = idKategori;
-      _applyFilter();
-    });
-  }
-
-  void _onSearchChanged(String query) {
-    setState(() {
-      _searchQuery = query;
-      _applyFilter();
-    });
-  }
-
-  // void _clearFilter() {
-  //   setState(() {
-  //     _selectedKategoriId = null;
-  //     _searchQuery = '';
-  //     _filteredBarangs = List.from(_allBarangs);
-  //   });
-  // }
-
-  Future<void> _confirmLogout() async {
-  final shouldLogout = await showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Konfirmasi Logout'),
-      content: const Text('Apakah Anda yakin ingin logout?'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Batal'),
-        ),
-        ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Logout'),
-        ),
-      ],
-    ),
-  );
-
-  if (shouldLogout == true) {
-      await _onLogout();
-    }
-  }
-
-  Future<void> _onLogout() async {
-  try {
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-      Navigator.of(context).pop();
-    }
-
-    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LoginPage()),
-      (route) => false,
-    );
-  } catch (e) {
-    print('Logout error: $e');
-  }
-}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TopNavbar(
-        onSearch: _onSearchChanged,
-        searchQuery: _searchQuery,
+      key: _scaffoldKey,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 255, 239, 223),
+        title: const Text(
+          'Beranda',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        automaticallyImplyLeading: true,
       ),
-      drawer: KategoriDrawer(
-        onKategoriSelected: _onKategoriSelected,
-        onLogout: _confirmLogout,
-      ),
-      body: _isLoading
-    ? const Center(child: CircularProgressIndicator())
-     : Container(
+      body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -187,95 +43,143 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_selectedKategoriId != null) ...[
-              Container(
-                width: double.infinity,
-                color: Color.fromARGB(255, 238, 237, 237),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Text(
-                  'KATEGORI → ${_allKategoris.firstWhere(
-                    (k) => k.idKategori == _selectedKategoriId,
-                    orElse: () => Kategori(namaKategori: 'Tidak diketahui'),
-                  ).namaKategori ?? 'Tidak diketahui'}',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
+            CarouselSlider(
+              options: CarouselOptions(
+                height: 500.0,
+                enlargeCenterPage: true,
+                autoPlay: true,
+                aspectRatio: 16 / 9,
+                autoPlayCurve: Curves.fastOutSlowIn,
+                enableInfiniteScroll: true,
+                autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                viewportFraction: 1.0,
+                onPageChanged: (index, reason) {
+                  setState(() {});
+                },
               ),
-            ],
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'PRODUK TERKAIT',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
-              child: Text('Dapatkan barang ini sebelum kehabisan!'),
-            ),
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.75,
-                ),
-                itemCount: _filteredBarangs.length,
-                itemBuilder: (context, index) {
-                  final barang = _filteredBarangs[index];
-                  return GestureDetector(
-                    onTap: () {
-                      if (barang.idBarang != null) {
-                        print('Navigasi ke detail barang dengan ID: ${barang.idBarang}');
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => DetailBarangPage(idBarang: barang.idBarang!.toString()),
+              items: [
+                'lib/assets/images/perabotanrumah.png',
+                'lib/assets/images/perlengkapantaman.png',
+                'lib/assets/images/hobi.png',
+              ].map((imagePath) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Stack(
+                      children: [
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.circular(10.0),
+                            image: DecorationImage(
+                              image: AssetImage(imagePath),
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        );
-                      } else {
-                        print('Barang tidak memiliki ID!');
-                      }
-                    },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
-                              child: Image.network(
-                                'http://192.168.88.116:8000/api/foto-barang/${barang.fotoBarang}',
-                                width: 100,
-                                height: 100,
+                        ),
+                        if (imagePath == 'lib/assets/images/perlengkapantaman.png')
+                          Positioned(
+                            bottom: 20,
+                            left: 20,
+                            child: Text(
+                              'PERLENGKAPAN OUTDOOR',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
+                          if (imagePath == 'lib/assets/images/hobi.png')
+                          Positioned(
+                            bottom: 20,
+                            left: 20,
                             child: Text(
-                              barang.namaBarang ?? 'Tanpa nama',
-                              style: const TextStyle(fontWeight: FontWeight.w600),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                              'KOLEKSI & HOBI',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-              },
+                        if (imagePath == 'lib/assets/images/perabotanrumah.png')
+                          Positioned(
+                            bottom: 20,
+                            left: 20,
+                            child: Text(
+                              'PERABOTAN RUMAH',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withOpacity(0.5),
+                                    offset: const Offset(2, 2),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                );
+              }).toList(),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(2, (index) => Container(
+                width: 8.0,
+                height: 8.0,
+                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: index == 0 ? Colors.grey : Colors.white,
+                ),
+              )),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ShowBarang()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 4, 121, 2),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text("Mulai Cari Barang"),
+              ),
+            ),
+          ],
+        ),
       ),
-     ),
     );
   }
 }

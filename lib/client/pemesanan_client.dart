@@ -5,8 +5,8 @@ import 'package:reusemart/entity/pemesanan.dart';
 
 class PemesananClient {
   static final String endpoint = '/api';
-  // static final String url = '10.0.2.2:8000';
-  static final String url = '192.168.88.116:8000';
+  static final String url = '10.0.2.2:8000';
+  // static final String url = '192.168.88.116:8000';
 
   static Future<Map<String, List<Pemesanan>>> getPemesananKurir() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -108,6 +108,66 @@ class PemesananClient {
     }
   }
 
+  // Pembeli - Pemesanan
+  static Future<List<Pemesanan>> getPemesananByIdPembeli(String idPembeli) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
 
+    if (token == null) {
+      throw Exception('Token not found');
+    }
 
+    final response = await get(
+      Uri.http(url, '$endpoint/getPemesananByIdPembeli/$idPembeli'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (jsonResponse['status'] == true) {
+        final data = jsonResponse['data'] as List<dynamic>;
+        return data
+            .map((item) => Pemesanan.fromJson(item as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('Gagal ambil data pemesanan: ${jsonResponse['message']}');
+      }
+    } else {
+      throw Exception('Failed to load pemesanan by pembeli: ${response.body}');
+    }
+  }
+
+  static Future<Pemesanan> getPemesananByIdPemesanan(String idPemesanan) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('auth_token');
+
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await get(
+      Uri.http(url, '$endpoint/getPemesananByIdPemesanan/$idPemesanan'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (jsonResponse['status'] == true) {
+        final data = jsonResponse['data'] as Map<String, dynamic>;
+        return Pemesanan.fromJson(data);
+      } else {
+        throw Exception('Gagal ambil data pemesanan: ${jsonResponse['message']}');
+      }
+    } else {
+      throw Exception('Failed to load pemesanan by ID: ${response.body}');
+    }
+  }
 }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:reusemart/view/Hunter/history_komisi.dart';
 import 'package:reusemart/view/Pembeli/klaim_merchandise.dart';
+import 'package:reusemart/view/Pembeli/profile_pembeli.dart';
+import 'package:reusemart/view/Pembeli/riwayat_pembelian.dart';
+import 'package:reusemart/view/Penitip/profile_penitip.dart';
+import 'package:reusemart/view/Penitip/riwayat_penitipan.dart';
 import 'package:reusemart/view/home_page.dart';
 import 'package:reusemart/view/Kurir/profile_kurir.dart';
 import 'package:reusemart/view/Hunter/profile_hunter.dart';
 import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
+import 'package:reusemart/view/show_barang.dart';
 
 class NavBar extends StatefulWidget {
   final int selectedIndex;
@@ -47,9 +52,9 @@ class _NavBarState extends State<NavBar> {
   List<Widget> _getPages() {
     switch (widget.userType) {
       case 'pembeli':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), KlaimMerchandise(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), RiwayatPembelianPage(), KlaimMerchandise(), ProfilePembeli()];
       case 'penitip':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), HomePage(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), RiwayatPenitipanPage(), ProfilePenitip()];
       case 'Kurir':
         return [HomePage(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':

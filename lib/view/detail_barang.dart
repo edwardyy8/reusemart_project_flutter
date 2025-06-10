@@ -128,7 +128,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://192.168.1.105:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
+                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,
