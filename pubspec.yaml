@@ -53,6 +53,7 @@ flutter:
     - lib/assets/images/perabotanrumah.png
     - lib/assets/images/perlengkapantaman.png
     - lib/assets/images/hobi.png
+    - lib/assets/images/iconbadge.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

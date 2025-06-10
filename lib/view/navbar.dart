@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:reusemart/view/Hunter/history_komisi.dart';
+import 'package:reusemart/view/Hunter/profile_hunter.dart';
+import 'package:reusemart/view/Kurir/profile_kurir.dart';
+import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
 import 'package:reusemart/view/Pembeli/klaim_merchandise.dart';
 import 'package:reusemart/view/Pembeli/profile_pembeli.dart';
 import 'package:reusemart/view/Pembeli/riwayat_pembelian.dart';
 import 'package:reusemart/view/Penitip/profile_penitip.dart';
 import 'package:reusemart/view/Penitip/riwayat_penitipan.dart';
 import 'package:reusemart/view/home_page.dart';
-import 'package:reusemart/view/Kurir/profile_kurir.dart';
-import 'package:reusemart/view/Hunter/profile_hunter.dart';
-import 'package:reusemart/view/Kurir/tugas_pengiriman.dart';
 import 'package:reusemart/view/show_barang.dart';
 
 class NavBar extends StatefulWidget {
@@ -52,13 +52,13 @@ class _NavBarState extends State<NavBar> {
   List<Widget> _getPages() {
     switch (widget.userType) {
       case 'pembeli':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), RiwayatPembelianPage(), KlaimMerchandise(), ProfilePembeli()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), RiwayatPembelianPage(), KlaimMerchandise(), ProfilePembeli()];
       case 'penitip':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), RiwayatPenitipanPage(), ProfilePenitip()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), RiwayatPenitipanPage(), ProfilePenitip()];
       case 'Kurir':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), HistoryKomisi(), ProfileHunter()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), HistoryKomisi(), ProfileHunter()];
       default:
         return [HomePage(), HomePage()];
     }
@@ -68,32 +68,37 @@ class _NavBarState extends State<NavBar> {
     switch (widget.userType) {
       case 'pembeli':
         return [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
           BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Riwayat'),
           BottomNavigationBarItem(icon: Icon(Icons.card_giftcard), label: 'Merchandise'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
       case 'penitip':
         return [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
           BottomNavigationBarItem(icon: Icon(Icons.inventory), label: 'Penitipan'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
       case 'Kurir':
         return [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
           BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Tugas'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
       case 'Hunter':
         return [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
           BottomNavigationBarItem(icon: Icon(Icons.monetization_on), label: 'Komisi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
       default:
         return [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
         ];
     }
