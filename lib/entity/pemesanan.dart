@@ -15,6 +15,7 @@ class Pemesanan {
   DateTime? tanggalDiterima;
   String? fotoBukti;
   DateTime? tanggalPelunasan;
+  String? statusPembayaran;
   String? statusPengiriman;
   DateTime? batasPengambilan;
   int? poinDigunakan;

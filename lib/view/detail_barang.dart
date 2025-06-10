@@ -27,7 +27,8 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
     setState(() => isLoading = true);
     try {
       final barangData = await UserClient.getBarangById(widget.idBarang);
-      final penitipData = await UserClient.getPenitipById(barangData['barang']['id_penitip']);
+      final penitipData =
+          await UserClient.getPenitipById(barangData['barang']['id_penitip']);
       print("Penitip data: $penitipData");
       if (mounted) {
         setState(() {
@@ -44,7 +45,8 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
   }
 
   String formatHarga(int harga) {
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final formatter =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
     return formatter.format(harga);
   }
 
@@ -55,10 +57,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFFFFFFF),
-            Color.fromARGB(255, 255, 239, 223)
-          ],
+          colors: [Color(0xFFFFFFFF), Color.fromARGB(255, 255, 239, 223)],
           stops: [0.64, 0.85],
         ),
       ),
@@ -83,7 +82,8 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
   }
 
   Widget buildDetailContent() {
-    final garansiAktif = DateTime.parse(barang!['tanggal_garansi']).isAfter(DateTime.now());
+    final garansiAktif =
+        DateTime.parse(barang!['tanggal_garansi']).isAfter(DateTime.now());
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,23 +99,20 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
                 const Icon(Icons.broken_image, size: 100),
           ),
         ),
-
         const SizedBox(height: 16),
-
         Text(
           formatHarga(barang!['harga_barang']),
-          style: const TextStyle(color: Colors.green, fontSize: 22, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+              color: Colors.green, fontSize: 22, fontWeight: FontWeight.bold),
         ),
         Text(
           barang!['nama_barang'],
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
-
         const SizedBox(height: 4),
-        Text("${barang!['status_barang']} • ${garansiAktif ? "Garansi" : "Tanpa Garansi"} • ${barang!['berat_barang']}Kg"),
-
+        Text(
+            "${barang!['status_barang']} • ${garansiAktif ? "Garansi" : "Tanpa Garansi"} • ${barang!['berat_barang']}Kg"),
         const SizedBox(height: 16),
-
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -128,7 +125,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://192.168.1.105:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
+                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,
@@ -140,9 +137,35 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(penitip!['nama'], style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  const Text("penitip ReuseMart", style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  Row(
+                    children: [
+                      if (penitip!['is_top'] == "Ya") ...[
+                        Image.asset(
+                          'lib/assets/images/iconbadge.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                      ],
+                      Text(
+                        penitip!['nama'],
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  if (penitip!['is_top'] == "Ya")
+                    const Text(
+                      "TOP SELLER",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   const SizedBox(height: 4),
+                  const Text("penitip ReuseMart",
+                      style: TextStyle(fontSize: 12, color: Colors.black54)),
+                  const SizedBox(height: 2),
                   Row(
                     children: [
                       const Icon(Icons.star, size: 16, color: Colors.amber),
@@ -152,14 +175,16 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
                     ],
                   )
                 ],
-              )
+              ),
             ],
           ),
         ),
-
         const SizedBox(height: 24),
-
-        const Text("Deskripsi Produk", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 16)),
+        const Text("Deskripsi Produk",
+            style: TextStyle(
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 16)),
         const SizedBox(height: 4),
         Text(barang!['deskripsi'] ?? "-", style: const TextStyle(fontSize: 14)),
       ],

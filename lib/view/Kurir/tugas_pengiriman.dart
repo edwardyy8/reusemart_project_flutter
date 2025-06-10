@@ -476,7 +476,23 @@ class _TugasPengirimanState extends State<TugasPengiriman> with SingleTickerProv
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Tandai Selesai Pengiriman'),
+          titlePadding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          title: Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 255, 239, 223),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            child: const Text(
+              'Tandai Selesai Pengiriman',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -486,13 +502,27 @@ class _TugasPengirimanState extends State<TugasPengiriman> with SingleTickerProv
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Tidak'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Tidak', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Iya'),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color.fromARGB(255, 4, 121, 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Iya', style: TextStyle(fontWeight: FontWeight.bold)),
               onPressed: () {
                 Navigator.of(context).pop();
                 _tandaiSelesaiKirim(idPemesanan);
