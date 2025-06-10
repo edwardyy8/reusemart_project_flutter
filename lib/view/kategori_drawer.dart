@@ -4,12 +4,10 @@ import 'package:reusemart/entity/kategori.dart';
 
 class KategoriDrawer extends StatelessWidget {
   final Function(int idKategori) onKategoriSelected;
-  final Future<void> Function() onLogout;
 
   const KategoriDrawer({
     super.key,
     required this.onKategoriSelected,
-    required this.onLogout,
   });
 
   @override
@@ -60,19 +58,6 @@ class KategoriDrawer extends StatelessWidget {
                   }).toList(),
                 );
               }).toList(),
-              
-              ListTile(
-                tileColor: const Color.fromARGB(255, 199, 44, 32),
-                iconColor: Colors.white,
-                leading: const Icon(Icons.logout),
-                textColor: Colors.white,
-                title: const Text("Logout"),
-                onTap: () async {
-                  Navigator.of(context).pop(); // tutup drawer 
-                  await Future.delayed(const Duration(milliseconds: 300));
-                  await onLogout(); 
-                },
-              ),
             ],
           );
         },

@@ -1,6 +1,8 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusemart/entity/user.dart';
+import 'package:reusemart/view/login_page.dart';
 import '../../providers/providers.dart';
 import 'package:reusemart/component/form_profile.dart';
 
@@ -26,6 +28,10 @@ class ProfileHunter extends ConsumerWidget {
       ),
       body: usersAsync.when(
         data: (data) {
+          if (data == null) {
+            return Center(child: const Text('Tidak ada user (sudah logout)'));
+          }
+          
           final hunter = data as Pegawai;
 
           return SafeArea(
@@ -37,7 +43,7 @@ class ProfileHunter extends ConsumerWidget {
                     constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _buildHeader(context, hunter, ref),
                           const SizedBox(height: 40),
@@ -96,6 +102,36 @@ class ProfileHunter extends ConsumerWidget {
                                   ],
                                 ),
                               ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () => _showConfirmation(context, ref),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              backgroundColor: Color.fromARGB(255, 255, 239, 223),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(
+                                  Icons.logout,
+                                  size: 22,
+                                  color: Color.fromARGB(255, 4, 121, 2),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Color.fromARGB(255, 4, 121, 2),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 20),
@@ -227,5 +263,109 @@ class ProfileHunter extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showConfirmation(BuildContext context, WidgetRef ref) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          titlePadding: EdgeInsets.zero,
+          backgroundColor: Colors.white,
+          title: Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 255, 239, 223),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+            ),
+            child: const Text(
+              'Konfirmasi Logout',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Apakah Anda yakin ingin logout dari aplikasi?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.grey,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Tidak', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color.fromARGB(255, 4, 121, 2),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text('Iya', style: TextStyle(fontWeight: FontWeight.bold)),
+              onPressed: () {
+                _onLogout(context, ref);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _onLogout(BuildContext context, WidgetRef ref) async {
+    try {
+      await ref.read(userListProvider.notifier).logout();
+
+      if (!context.mounted) return;
+
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.success,
+        showCloseIcon: false,
+        title: 'Success',
+        desc: 'Logout Berhasil! Kami berharap Anda kembali lagi.',
+        dismissOnTouchOutside: false,
+        btnOkOnPress: () {
+          Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => const LoginPage()),
+          (Route<dynamic> route) => false,
+          );
+        },
+        btnOkIcon: Icons.check_circle,
+      ).show();
+      
+    } catch (e) {
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.leftSlide,
+        headerAnimationLoop: false,
+        dialogType: DialogType.error,
+        showCloseIcon: true,
+        title: 'Error',
+        desc: 'Logout gagal. Silahkan coba lagi.',
+        btnOkOnPress: () {},
+        btnOkColor: Colors.red,
+      ).show();
+      print('Logout error: $e');
+    }
   }
 }

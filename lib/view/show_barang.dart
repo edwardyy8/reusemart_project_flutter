@@ -110,47 +110,6 @@ class _ShowBarangState extends State<ShowBarang> {
     });
   }
 
-  Future<void> _confirmLogout() async {
-    final shouldLogout = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Konfirmasi Logout'),
-        content: const Text('Apakah Anda yakin ingin logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Batal'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-
-    if (shouldLogout == true) {
-      await _onLogout();
-    }
-  }
-
-  Future<void> _onLogout() async {
-    try {
-      await Future.delayed(const Duration(seconds: 1));
-
-      if (_scaffoldKey.currentState?.isDrawerOpen ?? false) {
-        Navigator.of(context).pop();
-      }
-
-      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const LoginPage()),
-        (route) => false,
-      );
-    } catch (e) {
-      print('Logout error: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,7 +119,6 @@ class _ShowBarangState extends State<ShowBarang> {
       ),
       drawer: KategoriDrawer(
         onKategoriSelected: _onKategoriSelected,
-        onLogout: _confirmLogout,
       ),
       body: _isLoading
         ? const Center(child: CircularProgressIndicator())
@@ -242,7 +200,8 @@ class _ShowBarangState extends State<ShowBarang> {
                               child: ClipRRect(
                                 borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                                 child: Image.network(
-                                  'http://192.168.88.116:8000/api/foto-barang/${barang.fotoBarang}',
+                                  // 'http://192.168.88.116:8000/api/foto-barang/${barang.fotoBarang}',
+                                  'http://10.0.2.2:8000/api/foto-barang/${barang.fotoBarang}',
                                   width: 100,
                                   height: 100,
                                 ),
