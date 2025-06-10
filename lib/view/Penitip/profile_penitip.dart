@@ -35,7 +35,8 @@ class ProfilePenitip extends ConsumerWidget {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.only(bottom: 24),
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -54,13 +55,16 @@ class ProfilePenitip extends ConsumerWidget {
                           ),
                           const SizedBox(height: 30),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 20.0),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 255, 246, 237),
                                 border: Border.all(
-                                  color: const Color.fromARGB(255, 166, 166, 166),
+                                  color:
+                                      const Color.fromARGB(255, 166, 166, 166),
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
@@ -160,7 +164,8 @@ class ProfilePenitip extends ConsumerWidget {
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.error),
                 ),
               );
             },
@@ -170,10 +175,37 @@ class ProfilePenitip extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  penitip.nama ?? '',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Row(
+                  children: [
+                    if (penitip.isTop == "Ya") ...[
+                      Image.asset(
+                        'lib/assets/images/iconbadge.png',
+                        width: 20,
+                        height: 20,
+                      ),
+                      const SizedBox(width: 6),
+                    ],
+                    Expanded(
+                      child: Text(
+                        penitip.nama ?? '',
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
+                if (penitip.isTop == "Ya")
+                  const Text(
+                    "TOP SELLER",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 Text(
                   penitip.email ?? '',
                   style: TextStyle(fontSize: 16, color: Colors.grey[800]),
@@ -183,7 +215,8 @@ class ProfilePenitip extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color.fromARGB(255, 166, 166, 166),
@@ -192,8 +225,9 @@ class ProfilePenitip extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          '${penitip.poinPenitip ?? 0} Poin Loyalitas',
-                          style: const TextStyle(fontSize: 15, color: Colors.black87),
+                          '${penitip.poinPenitip ?? 0} Poin Loyalitas ',
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black87),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -201,7 +235,8 @@ class ProfilePenitip extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: const Color.fromARGB(255, 166, 166, 166),
@@ -211,7 +246,8 @@ class ProfilePenitip extends ConsumerWidget {
                         ),
                         child: Text(
                           'Saldo Rp ${_formatCurrency(penitip.saldoPenitip ?? 0)}',
-                          style: const TextStyle(fontSize: 15, color: Colors.black87),
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.black87),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -241,6 +277,7 @@ class ProfilePenitip extends ConsumerWidget {
   }
 
   String _formatCurrency(num amount) {
-    return NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0).format(amount);
+    return NumberFormat.currency(locale: 'id_ID', symbol: '', decimalDigits: 0)
+        .format(amount);
   }
 }

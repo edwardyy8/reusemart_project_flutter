@@ -54,6 +54,8 @@ flutter:
     - lib/assets/images/perlengkapantaman.png
     - lib/assets/images/hobi.png
     - lib/assets/images/iconbadge.png
+    - lib/assets/images/page1.png
+    - lib/assets/images/page2.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
