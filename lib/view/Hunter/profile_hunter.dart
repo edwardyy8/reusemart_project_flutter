@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusemart/entity/user.dart';
 import 'package:reusemart/view/login_page.dart';
+import 'package:reusemart/view/navbar.dart';
 import '../../providers/providers.dart';
 import 'package:reusemart/component/form_profile.dart';
 
@@ -190,7 +191,7 @@ class ProfileHunter extends ConsumerWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.0.2.2:8000/api/pegawai/foto-profile/${hunter.fotoProfile}',
+                  'http://10.53.4.144:8000/api/pegawai/foto-profile/${hunter.fotoProfile}',
                   headers: {'Authorization': 'Bearer $token'},
                   width: 100,
                   height: 100,
@@ -345,9 +346,9 @@ class ProfileHunter extends ConsumerWidget {
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
           Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-          (Route<dynamic> route) => false,
+            context,
+            MaterialPageRoute(builder: (_) => NavBar(userType: "lain")),
+            (Route<dynamic> route) => false,
           );
         },
         btnOkIcon: Icons.check_circle,

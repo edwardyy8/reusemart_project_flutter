@@ -151,7 +151,7 @@ class _HistoryKomisiState extends State<HistoryKomisi> {
                             Row(
                               children: [
                                 Image.network(
-                                  'http://10.0.2.2.116:8000/api/foto-barang/$fotoBarang',
+                                  'http://10.53.4.144:8000/api/foto-barang/$fotoBarang',
                                   width: 64,
                                   height: 64,
                                   fit: BoxFit.cover,

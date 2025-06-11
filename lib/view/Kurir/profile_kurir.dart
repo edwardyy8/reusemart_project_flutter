@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reusemart/client/user_client.dart';
 import 'package:reusemart/entity/user.dart';
 import 'package:reusemart/view/login_page.dart';
+import 'package:reusemart/view/navbar.dart';
 import '../../providers/providers.dart';
 import 'package:reusemart/component/form_profile.dart';
 
@@ -389,9 +390,9 @@ class ProfileKurir extends ConsumerWidget {
         dismissOnTouchOutside: false,
         btnOkOnPress: () {
           Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-          (Route<dynamic> route) => false,
+            context,
+            MaterialPageRoute(builder: (_) => NavBar(userType: "lain")),
+            (Route<dynamic> route) => false,
           );
         },
         btnOkIcon: Icons.check_circle,

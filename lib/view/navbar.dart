@@ -9,6 +9,7 @@ import 'package:reusemart/view/Pembeli/riwayat_pembelian.dart';
 import 'package:reusemart/view/Penitip/profile_penitip.dart';
 import 'package:reusemart/view/Penitip/riwayat_penitipan.dart';
 import 'package:reusemart/view/home_page.dart';
+import 'package:reusemart/view/login_page.dart';
 import 'package:reusemart/view/show_barang.dart';
 
 class NavBar extends StatefulWidget {
@@ -52,15 +53,15 @@ class _NavBarState extends State<NavBar> {
   List<Widget> _getPages() {
     switch (widget.userType) {
       case 'pembeli':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), RiwayatPembelianPage(), KlaimMerchandise(), ProfilePembeli()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(key: ValueKey('home-$_refreshKey')), RiwayatPembelianPage(), KlaimMerchandise(), ProfilePembeli()];
       case 'penitip':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), RiwayatPenitipanPage(), ProfilePenitip()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(key: ValueKey('home-$_refreshKey')), RiwayatPenitipanPage(), ProfilePenitip()];
       case 'Kurir':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), TugasPengiriman(), ProfileKurir()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(key: ValueKey('home-$_refreshKey')), TugasPengiriman(), ProfileKurir()];
       case 'Hunter':
-        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(), HistoryKomisi(), ProfileHunter()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(key: ValueKey('home-$_refreshKey')), HistoryKomisi(), ProfileHunter()];
       default:
-        return [HomePage(), HomePage()];
+        return [HomePage(key: ValueKey('home-$_refreshKey')), ShowBarang(key: ValueKey('home-$_refreshKey')), LoginPage()];
     }
   }
 
@@ -99,7 +100,7 @@ class _NavBarState extends State<NavBar> {
         return [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.shopping_bag_outlined), label: 'Produk'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Login'),
         ];
     }
   }

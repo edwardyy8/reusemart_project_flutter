@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:reusemart/view/login_page.dart';
+import 'package:reusemart/view/navbar.dart';
 
 class SplashScrenn extends StatefulWidget {
   const SplashScrenn({super.key});
@@ -19,10 +20,15 @@ class _SplashScrennState extends State<SplashScrenn>
 
     Future.delayed(Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => const LoginPage(),
-          )
+        // Navigator.of(context).pushReplacement(
+        //   MaterialPageRoute(
+        //     builder: (_) => const LoginPage(),
+        //   )
+        // );
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => NavBar(userType: "lain")),
+          (Route<dynamic> route) => false,
         );
       }
     });

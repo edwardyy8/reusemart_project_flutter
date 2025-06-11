@@ -201,7 +201,7 @@ class _ShowBarangState extends State<ShowBarang> {
                                 borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
                                 child: Image.network(
                                   // 'http://192.168.88.116:8000/api/foto-barang/${barang.fotoBarang}',
-                                  'http://10.0.2.2:8000/api/foto-barang/${barang.fotoBarang}',
+                                  'http://10.53.4.144:8000/api/foto-barang/${barang.fotoBarang}',
                                   width: 100,
                                   height: 100,
                                 ),

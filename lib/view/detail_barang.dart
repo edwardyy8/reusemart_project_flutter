@@ -91,7 +91,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.network(
-            'http://192.168.88.116:8000/api/foto-barang/${barang!['id_barang']}/${barang!['foto_barang']}',
+            'http://10.53.4.144:8000/api/foto-barang/${barang!['id_barang']}/${barang!['foto_barang']}',
             height: 200,
             width: double.infinity,
             fit: BoxFit.contain,
@@ -125,7 +125,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
+                  'http://10.53.4.144:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,
@@ -171,7 +171,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
                       const Icon(Icons.star, size: 16, color: Colors.amber),
                       Text(" ${penitip!['rating_penitip'] ?? 0}"),
                       const SizedBox(width: 12),
-                      Text("Barang Terjual : ${jumlah_terjual ?? 0}")
+                      // Text("Barang Terjual : ${jumlah_terjual ?? 0}")
                     ],
                   )
                 ],
