@@ -14,6 +14,8 @@ class Barang {
   double? beratBarang;
   DateTime? tanggalGaransi;
   String? fotoBarang;
+  String? fotoBarang2;
+  String? fotoBarang3;
 
   Barang({
     this.idBarang,
@@ -29,6 +31,8 @@ class Barang {
     this.beratBarang,
     this.tanggalGaransi,
     this.fotoBarang,
+    this.fotoBarang2,
+    this.fotoBarang3,
   });
 
   factory Barang.fromRawJson(String str) => Barang.fromJson(json.decode(str));
@@ -51,6 +55,8 @@ class Barang {
           ? DateTime.tryParse(json['tanggal_garansi'] as String)
           : null,
       fotoBarang: json["foto_barang"] as String?,
+      fotoBarang2: json["foto_barang2"] as String?,
+      fotoBarang3: json["foto_barang3"] as String?,
     );
   }
 
@@ -69,6 +75,8 @@ class Barang {
       "berat_barang": beratBarang,
       "tanggal_garansi": tanggalGaransi?.toIso8601String(),
       "foto_barang": fotoBarang,
+      "foto_barang2": fotoBarang2,
+      "foto_barang3": fotoBarang3,
     };
   }
 }

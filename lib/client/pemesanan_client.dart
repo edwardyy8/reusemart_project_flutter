@@ -5,8 +5,8 @@ import 'package:reusemart/entity/pemesanan.dart';
 
 class PemesananClient {
   static final String endpoint = '/api';
-  // static final String url = '10.0.2.2:8000';
-  static final String url = '10.53.4.144:8000';
+  static final String url = '10.0.2.2:8000';
+  // static final String url = '10.53.4.144:8000';
 
   static Future<Map<String, List<Pemesanan>>> getPemesananKurir() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

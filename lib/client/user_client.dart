@@ -12,8 +12,8 @@ import 'package:reusemart/entity/merchandise.dart';
 
 class UserClient {
   static final String endpoint = '/api';
-  // static final String url = '10.0.2.2:8000';
-  static final String url = '10.53.4.144:8000';
+  static final String url = '10.0.2.2:8000';
+  // static final String url = '10.53.4.144:8000';
 
   static Future<String?> getAuthToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:reusemart/client/user_client.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class DetailBarangPage extends StatefulWidget {
   final String idBarang;
@@ -16,6 +17,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
   Map<String, dynamic>? barang;
   Map<String, dynamic>? penitip;
   int? jumlah_terjual;
+  List<String> imageUrls = [];
 
   @override
   void initState() {
@@ -36,6 +38,11 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
           jumlah_terjual = barangData['jumlah_barang_terjual'];
           penitip = penitipData;
           isLoading = false;
+          imageUrls = [
+            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang']}',
+            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang2']}',
+            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang3']}',
+          ];
         });
       }
     } catch (e) {
@@ -88,16 +95,28 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.network(
-            'http://10.53.4.144:8000/api/foto-barang/${barang!['id_barang']}/${barang!['foto_barang']}',
-            height: 200,
-            width: double.infinity,
-            fit: BoxFit.contain,
-            errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.broken_image, size: 100),
+        CarouselSlider(
+          options: CarouselOptions(
+            height: 250,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false,
+            viewportFraction: 0.9,
+            autoPlay: true,
           ),
+          items: imageUrls
+              .where((url) => url.split('/').last != 'null')
+              .map((url) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                url,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.broken_image, size: 100),
+              ),
+            );
+          }).toList(),
         ),
         const SizedBox(height: 16),
         Text(
@@ -125,7 +144,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.53.4.144:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
+                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,
