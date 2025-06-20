@@ -90,7 +90,10 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
 
   Widget buildDetailContent() {
     final garansiAktif =
-        DateTime.parse(barang!['tanggal_garansi']).isAfter(DateTime.now());
+        barang!['garansi'] == "Ya" &&
+        (barang!['tanggal_garansi'] != null
+            ? DateTime.parse(barang!['tanggal_garansi']).isAfter(DateTime.now())
+            : false);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
