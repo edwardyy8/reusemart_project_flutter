@@ -82,7 +82,7 @@ class ProfileKurir extends ConsumerWidget {
                                           
                                 final token = snapshot.data!;
                                 return Image.network(
-                                  'http://10.0.2.2:8000/api/pegawai/foto-profile/${kurir.fotoProfile}',
+                                  'https://laraveledwardy.barioth.web.id/api/pegawai/foto-profile/${kurir.fotoProfile}',
                                   headers: {
                                     'Authorization': 'Bearer $token',
                                   },

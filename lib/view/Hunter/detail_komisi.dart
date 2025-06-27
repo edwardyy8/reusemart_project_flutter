@@ -111,7 +111,7 @@ class DetailKomisi extends StatefulWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: Image.network(
-            'http://10.53.4.144:8000/api/foto-barang/${barang!['id_barang']}/${barang!['foto_barang']}',
+            'https://laraveledwardy.barioth.web.id/api/foto-barang/${barang!['id_barang']}/${barang!['foto_barang']}',
             height: 200,
             width: double.infinity,
             fit: BoxFit.contain,

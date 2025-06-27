@@ -40,17 +40,25 @@ class Barang {
     return Barang(
       idBarang: json["id_barang"] as String?,
       idPenitip: json["id_penitip"] as String?,
-      idKategori: (json['id_kategori'] as num?)?.toInt(),
+      idKategori: json['id_kategori'] != null
+        ? int.tryParse(json['id_kategori'].toString())
+        : null,
       namaBarang: json["nama_barang"] as String?,
-      stokBarang: (json['stok_barang'] as num?)?.toInt(),
-      hargaBarang: (json["harga_barang"] as num?)?.toDouble(),
+      stokBarang: json['stok_barang'] != null
+          ? int.tryParse(json['stok_barang'].toString())
+          : null,
+      hargaBarang: json["harga_barang"] != null
+          ? double.tryParse(json["harga_barang"].toString())
+          : null,
       garansi: json["garansi"] as String?,
       statusBarang: json["status_barang"] as String?,
       deskripsiBarang: json["deskripsi"] as String?,
       tanggalMasuk: json['tanggal_masuk'] != null
           ? DateTime.tryParse(json['tanggal_masuk'] as String)
           : null,
-      beratBarang: (json["berat_barang"] as num?)?.toDouble(),
+      beratBarang: json["berat_barang"] != null
+          ? double.tryParse(json["berat_barang"].toString())
+          : null,
       tanggalGaransi: json['tanggal_garansi'] != null
           ? DateTime.tryParse(json['tanggal_garansi'] as String)
           : null,

@@ -5,7 +5,7 @@ import 'package:reusemart/entity/pemesanan.dart';
 
 class PemesananClient {
   static final String endpoint = '/api';
-  static final String url = '10.0.2.2:8000';
+  static final String url = 'laraveledwardy.barioth.web.id';
   // static final String url = '10.53.4.144:8000';
 
   static Future<Map<String, List<Pemesanan>>> getPemesananKurir() async {
@@ -17,7 +17,7 @@ class PemesananClient {
     }
 
     final response = await get(
-      Uri.http(url, '$endpoint/getPemesananKurir'),
+      Uri.https(url, '$endpoint/getPemesananKurir'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -55,7 +55,7 @@ class PemesananClient {
     }
 
     final response = await post(
-      Uri.http(url, '$endpoint/terimaSelesaiKirim/$idPemesanan'),
+      Uri.https(url, '$endpoint/terimaSelesaiKirim/$idPemesanan'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -70,7 +70,7 @@ class PemesananClient {
   
   static Future<List<dynamic>> getKomisiHunter(String token) async {
     final response = await get(
-      Uri.http(url, '$endpoint/getKomisiHunter'),
+      Uri.https(url, '$endpoint/getKomisiHunter'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -88,7 +88,7 @@ class PemesananClient {
   static Future<Pemesanan> getPemesananByIdOrder(String idPemesanan) async {
 
     final response = await get(
-      Uri.http(url, '$endpoint/getPemesananByIdOrder/$idPemesanan'),
+      Uri.https(url, '$endpoint/getPemesananByIdOrder/$idPemesanan'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -118,7 +118,7 @@ class PemesananClient {
     }
 
     final response = await get(
-      Uri.http(url, '$endpoint/getPemesananByIdPembeli/$idPembeli'),
+      Uri.https(url, '$endpoint/getPemesananByIdPembeli/$idPembeli'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -150,7 +150,7 @@ class PemesananClient {
     }
 
     final response = await get(
-      Uri.http(url, '$endpoint/getPemesananByIdPemesanan/$idPemesanan'),
+      Uri.https(url, '$endpoint/getPemesananByIdPemesanan/$idPemesanan'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

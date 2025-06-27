@@ -18,10 +18,16 @@ class Merchandise {
   factory Merchandise.fromRawJson(String str) => Merchandise.fromJson(json.decode(str));
   factory Merchandise.fromJson(Map<String, dynamic> json) {
     return Merchandise(
-      idMerchandise: json['id_merchandise'],
+      idMerchandise: json['id_merchandise'] != null
+          ? (int.tryParse(json['id_merchandise'].toString()) ?? 0)
+          : null,
       namaMerchandise: json['nama_merchandise'],
-      stokMerchandise: json['stok_merchandise'],
-      poinMerchandise: json['poin_merchandise'],
+      stokMerchandise: json['stok_merchandise'] != null
+          ? (int.tryParse(json['stok_merchandise'].toString()) ?? 0)
+          : null,
+      poinMerchandise: json['poin_merchandise'] != null
+          ? (int.tryParse(json['poin_merchandise'].toString()) ?? 0)
+          : null,
       fotoMerchandise: json['foto_merchandise'],
     );
   }

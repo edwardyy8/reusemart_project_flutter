@@ -246,7 +246,7 @@ class _KlaimMerchandiseState extends ConsumerState<KlaimMerchandise> {
                               ClipRRect(
                                 borderRadius: const BorderRadius.horizontal(left: Radius.circular(10)),
                                 child: Image.network(
-                                  'http://10.53.4.144:8000/api/foto-merchandise/${merch.fotoMerchandise}',
+                                  'https://laraveledwardy.barioth.web.id/api/foto-merchandise/${merch.fotoMerchandise}',
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,

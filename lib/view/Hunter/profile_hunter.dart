@@ -191,7 +191,7 @@ class ProfileHunter extends ConsumerWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.53.4.144:8000/api/pegawai/foto-profile/${hunter.fotoProfile}',
+                  'https://laraveledwardy.barioth.web.id/api/pegawai/foto-profile/${hunter.fotoProfile}',
                   headers: {'Authorization': 'Bearer $token'},
                   width: 100,
                   height: 100,

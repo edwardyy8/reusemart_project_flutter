@@ -24,12 +24,16 @@ class Pembeli implements User {
   factory Pembeli.fromRawJson(String str) => Pembeli.fromJson(json.decode(str));
   factory Pembeli.fromJson(Map<String, dynamic> json) {
     return Pembeli(
-      idPembeli: (json['id_pembeli'] as num?)?.toInt(),
+      idPembeli: json['id_pembeli'] != null
+          ? int.tryParse(json['id_pembeli'].toString())
+          : null,
       nama: json['nama'],
       email: json['email'],
       password: json['password'],
       isAktif: json['is_aktif'],
-      poinPembeli: (json['poin_pembeli'] as num?)?.toInt(),
+      poinPembeli: json['poin_pembeli'] != null
+          ? int.tryParse(json['poin_pembeli'].toString())
+          : null,
       fotoProfile: json['foto_profile'],
       fcmToken: json['fcm_token'],
     );

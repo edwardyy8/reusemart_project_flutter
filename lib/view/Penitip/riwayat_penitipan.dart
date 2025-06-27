@@ -109,7 +109,7 @@ class _RiwayatPenitipanPageState extends State<RiwayatPenitipanPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      'http://10.0.2.2:8000/storage/${rincian.barang!.fotoBarang}',
+                      'https://laraveledwardy.barioth.web.id/storage/foto_barang/${rincian.barang!.fotoBarang}',
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
@@ -232,7 +232,7 @@ class _RiwayatPenitipanPageState extends State<RiwayatPenitipanPage> {
                                         borderRadius: BorderRadius.circular(8),
                                         child: rincian.barang?.fotoBarang != null
                                             ? Image.network(
-                                                'http://10.0.2.2:8000/storage/${rincian.barang!.fotoBarang}',
+                                                'https://laraveledwardy.barioth.web.id/storage/foto_barang/${rincian.barang!.fotoBarang}',
                                                 height: 80,
                                                 width: 80,
                                                 fit: BoxFit.cover,

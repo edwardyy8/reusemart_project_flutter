@@ -13,7 +13,9 @@ class Kategori {
 
   factory Kategori.fromJson(Map<String, dynamic> json) {
     return Kategori(
-      idKategori: (json['id_kategori']as num).toInt(),
+      idKategori: json['id_kategori'] != null
+          ? int.tryParse(json['id_kategori'].toString())
+          : null,
       namaKategori: json['nama_kategori'],
     );
   }

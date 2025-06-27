@@ -196,7 +196,7 @@ class ProfilePenitip extends ConsumerWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip.fotoProfile}',
+                  'https://laraveledwardy.barioth.web.id/api/penitip/foto-profile/${penitip.fotoProfile}',
                   headers: {'Authorization': 'Bearer $token'},
                   width: 100,
                   height: 100,

@@ -13,7 +13,9 @@ class Jabatan {
 
   factory Jabatan.fromJson(Map<String, dynamic> json) {
     return Jabatan(
-      idJabatan: (json['id_jabatan']as num).toInt(),
+      idJabatan: json['id_jabatan'] != null
+          ? (int.tryParse(json['id_jabatan'].toString()) ?? 0)
+          : null,
       namaJabatan: json['nama_jabatan'],
     );
   }

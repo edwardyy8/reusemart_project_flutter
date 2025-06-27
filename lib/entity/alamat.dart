@@ -22,9 +22,15 @@ class Alamat {
   factory Alamat.fromRawJson(String str) => Alamat.fromJson(json.decode(str));
   factory Alamat.fromJson(Map<String, dynamic> json) {
     return Alamat(
-      idAlamat: (json['id_alamat'] as num?)?.toInt(),
-      idPembeli: (json['id_pembeli'] as num?)?.toInt(),
-      isDefault: (json['is_default'] as num?)?.toInt(),
+      idAlamat: json['id_alamat'] != null
+          ? (int.tryParse(json['id_alamat'].toString()) ?? 0)
+          : null,
+      idPembeli: json['id_pembeli'] != null
+          ? (int.tryParse(json['id_pembeli'].toString()) ?? 0)
+          : null,
+      isDefault: json['is_default'] != null
+          ? (int.tryParse(json['is_default'].toString()) ?? 0)
+          : null,
       namaAlamat: json['nama_alamat'] as String?,
       labelAlamat: json['label_alamat'] as String?,
       namaPenerima: json['nama_penerima'] as String?,

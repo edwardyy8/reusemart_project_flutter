@@ -191,7 +191,7 @@ class ProfilePembeli extends ConsumerWidget {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.0.2.2:8000/api/pembeli/foto-profile/${pembeli.fotoProfile}',
+                  'https://laraveledwardy.barioth.web.id/api/pembeli/foto-profile/${pembeli.fotoProfile}',
                   headers: {'Authorization': 'Bearer $token'},
                   width: 100,
                   height: 100,

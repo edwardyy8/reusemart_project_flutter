@@ -52,10 +52,14 @@ class Pemesanan {
   factory Pemesanan.fromJson(Map<String, dynamic> json) {
     return Pemesanan(
       idPemesanan: json['id_pemesanan'] as String?,
-      idPembeli: (json['id_pembeli'] as num?)?.toInt(),
+      idPembeli: json['id_pembeli'] != null
+          ? (int.tryParse(json['id_pembeli'].toString()) ?? 0)
+          : null,
       idKurir: json['id_kurir'] as String?,
       idGudang: json['id_gudang'] as String?,
-      totalHarga: (json['total_harga'] as num?)?.toDouble(),
+      totalHarga: json['total_harga'] != null
+          ? double.tryParse(json['total_harga'].toString())
+          : null,
       metodePengiriman: json['metode_pengiriman'] as String?,
       tanggalPemesanan: json['tanggal_pemesanan'] != null
           ? DateTime.tryParse(json['tanggal_pemesanan'] as String)
@@ -77,10 +81,18 @@ class Pemesanan {
       batasPengambilan: json['batas_pengambilan'] != null
           ? DateTime.tryParse(json['batas_pengambilan'] as String)
           : null,
-      poinDigunakan: (json['poin_digunakan'] as num?)?.toInt(),
-      poinDidapatkan: (json['poin_didapatkan'] as num?)?.toInt(),
-      ongkos: (json['ongkos'] as num?)?.toDouble(),
-      idAlamat: (json['id_alamat'] as num?)?.toInt(),
+      poinDigunakan: json['poin_digunakan'] != null
+          ? (int.tryParse(json['poin_digunakan'].toString()) ?? 0)
+          : null,
+      poinDidapatkan: json['poin_didapatkan'] != null
+          ? (int.tryParse(json['poin_didapatkan'].toString()) ?? 0)
+          : null,
+      ongkos: json['ongkos'] != null
+          ? double.tryParse(json['ongkos'].toString())
+          : null,
+      idAlamat: json['id_alamat'] != null
+          ? (int.tryParse(json['id_alamat'].toString()) ?? 0)
+          : null,
       rincianPemesanan: (json['rincian_pemesanan'] as List?)
           ?.map((item) => RincianPemesanan.fromJson(item))
           .toList(),

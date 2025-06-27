@@ -12,7 +12,7 @@ import 'package:reusemart/entity/merchandise.dart';
 
 class UserClient {
   static final String endpoint = '/api';
-  static final String url = '10.0.2.2:8000';
+  static final String url = 'laraveledwardy.barioth.web.id';
   // static final String url = '10.53.4.144:8000';
 
   static Future<String?> getAuthToken() async {
@@ -40,7 +40,7 @@ class UserClient {
   static Future<void> sendFcmTokenToBackend(String userId, String userType, String fcmToken, String token) async {
     try {
       final response = await post(
-        Uri.http(url, '$endpoint/update-fcm-token'),
+        Uri.https(url, '$endpoint/update-fcm-token'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -65,7 +65,7 @@ class UserClient {
   static Future<void> removeFcmTokenOnLogout(String token) async {
     try {
       final response = await post(
-        Uri.http(url, '$endpoint/remove-fcm-token'),
+        Uri.https(url, '$endpoint/remove-fcm-token'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -90,7 +90,7 @@ class UserClient {
       }
 
       final response = await get(
-        Uri.http(url, '$endpoint/getUserData'),
+        Uri.https(url, '$endpoint/getUserData'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -128,7 +128,7 @@ class UserClient {
 
     try {
       var response = await post(
-        Uri.http(url, '$endpoint/login'),
+        Uri.https(url, '$endpoint/login'),
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           'email': email,
@@ -163,7 +163,7 @@ class UserClient {
   static Future<void> logout(String token) async {
     try {
       var response = await post(
-        Uri.http(url, '/api/logout'),
+        Uri.https(url, '/api/logout'),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token",
@@ -189,7 +189,7 @@ class UserClient {
   Future<int> getJumlahPesananKurir(String token) async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/jumlah-pesanan-kurir'),
+        Uri.https(url, '$endpoint/jumlah-pesanan-kurir'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -211,7 +211,7 @@ class UserClient {
   Future<int> getJumlahItemHunter(String token) async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/jumlah-item-hunter'),
+        Uri.https(url, '$endpoint/jumlah-item-hunter'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -233,7 +233,7 @@ class UserClient {
   Future<int> getJumlahKomisiHunter(String token) async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/getJumlahKomisiHunter'),
+        Uri.https(url, '$endpoint/getJumlahKomisiHunter'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -256,7 +256,7 @@ class UserClient {
 
   static Future<List<Kategori>> getAllKategoris() async {
     final response = await get(
-      Uri.http(url, '$endpoint/kategori'),
+      Uri.https(url, '$endpoint/kategori'),
       headers: {'Accept': 'application/json'},
     );
 
@@ -272,7 +272,7 @@ class UserClient {
   static Future<List<dynamic>> getAllBarangs() async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/barang'),
+        Uri.https(url, '$endpoint/barang'),
         headers: {
           // 'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -293,7 +293,7 @@ class UserClient {
 
   static Future<Map<String, dynamic>> getBarangById(String id) async {
     try {
-      final uri = Uri.http(url, '$endpoint/barang/$id');
+      final uri = Uri.https(url, '$endpoint/barang/$id');
       print('Fetching from: $uri');
 
       final response = await get(uri, headers: {'Accept': 'application/json'});
@@ -325,7 +325,7 @@ class UserClient {
   static Future<Map<String, dynamic>> getPenitipById(String id) async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/penitip/$id'),
+        Uri.https(url, '$endpoint/penitip/$id'),
         headers: {
           'Accept': 'application/json',
         },
@@ -347,7 +347,7 @@ class UserClient {
   static Future<int> getPoinPembeli(String token) async {
     try{
       final response = await get(
-        Uri.http(url, '$endpoint/pembeli/pembeliProfile'),
+        Uri.https(url, '$endpoint/pembeli/pembeliProfile'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -356,7 +356,9 @@ class UserClient {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         print('Jumlah poin pembeli: $data');
-        return data['pembeli']['poin_pembeli'] ?? 0;
+        final poinPembeli = data['pembeli']?['poin_pembeli'];
+        print('Poin pembeli: $poinPembeli');
+        return int.tryParse(poinPembeli.toString()) ?? 0;
       } else {
         throw Exception('Gagal mendapatkan poin pembeli');
       }
@@ -369,7 +371,7 @@ class UserClient {
   static Future<List<Merchandise>> getAllMerchandise() async {
     try {
       final response = await get(
-        Uri.http(url, '$endpoint/merchandise'),
+        Uri.https(url, '$endpoint/merchandise'),
           headers: {
           'Accept': 'application/json'
           },
@@ -390,7 +392,7 @@ class UserClient {
   static Future<Map<String, dynamic>> claimMerchandise(String token, int idMerchandise) async {
     try {
       final response = await post(
-        Uri.http(url, '$endpoint/claimMerchandise/$idMerchandise'),
+        Uri.https(url, '$endpoint/claimMerchandise/$idMerchandise'),
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

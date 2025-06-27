@@ -5,7 +5,7 @@ import 'package:reusemart/entity/rincian_penitipan.dart';
 
 class PenitipanClient {
   static const String endpoint = '/api';
-  static const String url = '10.0.2.2:8000';
+  static const String url = 'laraveledwardy.barioth.web.id';
 
   static Future<List<Rincian_Penitipan>> getPenitipanByIdPenitip(String idPenitip) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -16,7 +16,7 @@ class PenitipanClient {
     }
 
     final response = await http.get(
-      Uri.http(url, '$endpoint/getPenitipanByIdPenitip/$idPenitip'),
+      Uri.https(url, '$endpoint/getPenitipanByIdPenitip/$idPenitip'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

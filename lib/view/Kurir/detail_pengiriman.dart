@@ -178,7 +178,7 @@ class DetailPengiriman extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: Image.network(
-                                      'http://10.0.2.2:8000/storage/foto_barang/${rincian.barang?.fotoBarang}',
+                                      'https://laraveledwardy.barioth.web.id/storage/foto_barang/${rincian.barang?.fotoBarang}',
                                       width: 150,
                                       height: 150,
                                       fit: BoxFit.cover,

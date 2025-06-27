@@ -39,9 +39,9 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
           penitip = penitipData;
           isLoading = false;
           imageUrls = [
-            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang']}',
-            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang2']}',
-            'http://10.0.2.2:8000/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang3']}',
+            'https://laraveledwardy.barioth.web.id/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang']}',
+            'https://laraveledwardy.barioth.web.id/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang2']}',
+            'https://laraveledwardy.barioth.web.id/api/foto-barang/${barangData['barang']!['id_barang']}/${barangData['barang']!['foto_barang3']}',
           ];
         });
       }
@@ -51,10 +51,11 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
     }
   }
 
-  String formatHarga(int harga) {
+  String formatHarga(String harga) {
     final formatter =
         NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
-    return formatter.format(harga);
+    final intHarga = int.tryParse(harga) ?? 0;
+    return formatter.format(intHarga);
   }
 
   @override
@@ -147,7 +148,7 @@ class _DetailBarangPageState extends State<DetailBarangPage> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(50),
                 child: Image.network(
-                  'http://10.0.2.2:8000/api/penitip/foto-profile/${penitip!['foto_profile']}',
+                  'https://laraveledwardy.barioth.web.id/api/penitip/foto-profile/${penitip!['foto_profile']}',
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,

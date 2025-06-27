@@ -28,7 +28,9 @@ class Rincian_Penitipan {
   factory Rincian_Penitipan.fromRawJson(String str) => Rincian_Penitipan.fromJson(json.decode(str));
   factory Rincian_Penitipan.fromJson(Map<String, dynamic> json) {
     return Rincian_Penitipan(
-      idRincianPenitipan: (json['id_rincianpenitipan'] as num?)?.toInt(),
+      idRincianPenitipan: json['id_rincianpenitipan'] != null
+          ? (int.tryParse(json['id_rincianpenitipan'].toString()) ?? 0)
+          : null,
       idPenitipan: json['id_penitipan'] as String?,
       idBarang: json['id_barang'] as String?,
       tanggalAkhir: json['tanggal_akhir'] != null

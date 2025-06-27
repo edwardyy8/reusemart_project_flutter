@@ -31,13 +31,19 @@ class Pegawai implements User {
   factory Pegawai.fromJson(Map<String, dynamic> json) {
     return Pegawai(
       idPegawai: json['id_pegawai'],
-      idJabatan: json['id_jabatan'],
+      idJabatan: json['id_jabatan'] != null
+        ? int.tryParse(json['id_jabatan'].toString())
+        : null,
       nama: json['nama'],
       email: json['email'],
       password: json['password'],
       fotoProfile: json['foto_profile'],
-      tanggalLahir: DateTime.parse(json['tanggal_lahir']),
-      createdAt: DateTime.parse(json['createdAt']),
+      tanggalLahir: json['tanggal_lahir'] != null
+          ? DateTime.tryParse(json['tanggal_lahir'] as String)
+          : null,
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'] as String)
+          : null,
       isAktif: json['is_aktif'],
       fcmToken: json['fcm_token'],
       jabatan: json['jabatan'] != null
